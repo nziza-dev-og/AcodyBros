@@ -4,9 +4,11 @@ import { notFound } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import UpdateRequestStatus from "./UpdateRequestStatus";
-import { Briefcase, ListChecks, DollarSign, User, Mail, Phone } from "lucide-react";
+import { Briefcase, ListChecks, DollarSign, User, Mail, Phone, FileDown } from "lucide-react";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default async function RequestDetailsPage({ params }: { params: { id: string } }) {
     const request = await getProjectRequestDetails(params.id);
@@ -56,6 +58,20 @@ export default async function RequestDetailsPage({ params }: { params: { id: str
                             <h3 className="font-semibold mb-2 flex items-center gap-2"><DollarSign className="h-4 w-4 text-primary"/>Budget Range</h3>
                             <p className="text-muted-foreground">{request.budget || 'Not specified'}</p>
                         </div>
+                        {request.documentUrl && (
+                            <>
+                                <Separator />
+                                <div>
+                                    <h3 className="font-semibold mb-2 flex items-center gap-2"><FileDown className="h-4 w-4 text-primary"/>Project Document</h3>
+                                    <Button asChild>
+                                        <Link href={request.documentUrl} target="_blank" download={request.documentName || true}>
+                                            Download Document
+                                        </Link>
+                                    </Button>
+                                    <p className="text-xs text-muted-foreground mt-2">{request.documentName}</p>
+                                </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
             </div>

@@ -7,6 +7,8 @@ export const projectRequestSchema = z.object({
   features: z.string().min(20, { message: "Please list the desired features (min. 20 characters)." }),
   budget: z.string().optional().default(""),
   userId: z.string().min(1, { message: "User must be logged in." }),
+  documentUrl: z.string().url().optional(),
+  documentName: z.string().optional(),
 });
 
 export type ProjectRequestInput = z.infer<typeof projectRequestSchema>;

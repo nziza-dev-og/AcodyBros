@@ -1,13 +1,24 @@
 
 "use server";
 
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { revalidatePath } from "next/cache";
-import { projectRequestSchema, type ProjectRequestInput } from "@/lib/schemas";
+import { projectRequestSchema } from "@/lib/schemas";
+import { z } from "zod";
 
-export async function submitProjectRequest(data: ProjectRequestInput) {
-  const validatedFields = projectRequestSchema.safeParse(data);
+export async function submitProjectRequest(formData: FormData) {
+  const rawData = {
+    title: formData.get("title"),
+    description: formData.get("description"),
+    features: formData.get("features"),
+    budget: formData.get("budget"),
+    userId: formData.get("userId"),
+  };
+  
+  const validationSchema = projectRequestSchema.omit({ documentUrl: true, documentName: true });
+  const validatedFields = validationSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error.flatten().fieldErrors);
@@ -15,16 +26,41 @@ export async function submitProjectRequest(data: ProjectRequestInput) {
       error: "Invalid data. Please check the form and try again.",
     };
   }
-  
+
+  const file = formData.get("file") as File | null;
+  const fileUrl = formData.get("fileUrl") as string | null;
+
+  let documentUrl: string | undefined = undefined;
+  let documentName: string | undefined = undefined;
+
   try {
-    await addDoc(collection(db, "projectRequests"), {
+    if (file && file.size > 0) {
+      const storageRef = ref(storage, `project-docs/${validatedFields.data.userId}/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      documentUrl = await getDownloadURL(snapshot.ref);
+      documentName = file.name;
+    } else if (fileUrl) {
+      const urlValidation = z.string().url().safeParse(fileUrl);
+      if (urlValidation.success) {
+        documentUrl = urlValidation.data;
+        documentName = "Document Link";
+      } else {
+        return { error: "The provided URL is not valid." };
+      }
+    }
+
+    const dataToSave = {
       ...validatedFields.data,
       status: "pending",
       submittedAt: serverTimestamp(),
-    });
+      ...(documentUrl && { documentUrl }),
+      ...(documentName && { documentName }),
+    };
+
+    await addDoc(collection(db, "projectRequests"), dataToSave);
 
     revalidatePath("/dashboard");
-    revalidatePath("/admin");
+    revalidatePath("/admin/requests");
 
     return { success: "Project request submitted successfully!" };
   } catch (error) {
