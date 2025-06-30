@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,16 @@ import { BotMessageSquare, LayoutTemplate, Smartphone, ShieldCheck, ArrowRight, 
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
+// Define codeLines outside the component to prevent it from being recreated on every render.
+const codeLines = [
+  "<script>",
+  "  Alert(' Hello World ');",
+  "",
+  "  console.log( Hello.length )",
+  " }",
+  "</script>"
+];
 
 export default function Home() {
   const services = [
@@ -46,23 +57,16 @@ export default function Home() {
     }
   ];
 
-  const codeLines = [
-    "<script>",
-    "  Alert(' Hello World ');",
-    "",
-    "  console.log( Hello.length )",
-    " }",
-    "</script>"
-  ];
   const [currentCode, setCurrentCode] = useState('');
 
   useEffect(() => {
     let lineIndex = 0;
     let charIndex = 0;
-    let timeoutId;
+    let timeoutId: NodeJS.Timeout;
 
     const type = () => {
         if (lineIndex >= codeLines.length) {
+            // After finishing all lines, wait for 3 seconds then restart
             timeoutId = setTimeout(() => {
                 setCurrentCode('');
                 lineIndex = 0;
@@ -75,22 +79,28 @@ export default function Home() {
         const currentLine = codeLines[lineIndex];
         
         if (charIndex >= currentLine.length) {
+            // End of line, add a newline character
             setCurrentCode(prev => prev + '\n');
             lineIndex++;
             charIndex = 0;
+            // Wait a bit longer before starting the next line
             timeoutId = setTimeout(type, 400);
             return;
         }
         
+        // Type the next character
         setCurrentCode(prev => prev + currentLine[charIndex]);
         charIndex++;
+        // Randomize typing speed a bit
         timeoutId = setTimeout(type, 40 + Math.random() * 40);
     };
     
+    // Start the animation after a short delay
     timeoutId = setTimeout(type, 1000);
 
+    // Cleanup function to clear the timeout when the component unmounts
     return () => clearTimeout(timeoutId);
-  }, [codeLines]);
+  }, []); // Use an empty dependency array to run the effect only once on mount.
 
   return (
     <div className="flex flex-col items-center">
