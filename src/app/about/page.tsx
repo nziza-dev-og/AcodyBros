@@ -1,3 +1,4 @@
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Target, Eye, Code } from "lucide-react";
 import Image from "next/image";
@@ -50,10 +51,10 @@ export default async function AboutPage() {
 
       <section className="text-center">
         <h2 className="text-3xl md:text-4xl font-bold font-headline mb-12 flex items-center justify-center gap-3"><Users className="w-10 h-10 text-primary" /> Meet the Team</h2>
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {teamMembers.length > 0 ? (
             teamMembers.map((member) => (
-              <div key={member.uid} className="flex flex-col items-center">
+              <div key={member.uid} className="flex flex-col items-center text-center">
                 <Image 
                   src={member.photoURL || `https://placehold.co/150x150.png`}
                   alt={member.name} 
@@ -64,6 +65,9 @@ export default async function AboutPage() {
                 />
                 <h3 className="text-xl font-bold">{member.name}</h3>
                 <p className="text-primary capitalize">{member.role}</p>
+                {member.description && (
+                  <p className="text-muted-foreground mt-2 text-sm px-4">{member.description}</p>
+                )}
               </div>
             ))
           ) : (

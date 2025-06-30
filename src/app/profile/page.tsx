@@ -17,6 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { UserCircle2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Textarea } from '@/components/ui/textarea';
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -31,6 +32,7 @@ export default function ProfilePage() {
       name: '',
       phone: '',
       photoURL: '',
+      description: '',
     },
   });
 
@@ -42,6 +44,7 @@ export default function ProfilePage() {
         name: user.name || '',
         phone: user.phone || '',
         photoURL: user.photoURL || '',
+        description: user.description || '',
       });
     }
   }, [user, form]);
@@ -80,6 +83,7 @@ export default function ProfilePage() {
                     <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
                     <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
                     <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
+                    <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-20 w-full"/></div>
                     <Skeleton className="h-10 w-32"/>
                 </CardContent>
             </Card>
@@ -153,6 +157,27 @@ export default function ProfilePage() {
                     <FormControl>
                       <Input placeholder="+1 234 567 890" {...field} disabled={loading} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Short Bio</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Tell us a little about yourself."
+                        {...field}
+                        disabled={loading}
+                        rows={3}
+                      />
+                    </FormControl>
+                     <FormDescription>
+                        This will be shown on your profile and team pages. (Max 200 characters)
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

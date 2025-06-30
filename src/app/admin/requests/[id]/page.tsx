@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import UpdateRequestStatus from "./UpdateRequestStatus";
-import { Briefcase, ListChecks, DollarSign, User, Mail, Phone, FileDown } from "lucide-react";
+import { Briefcase, ListChecks, DollarSign, User, Mail, Phone, FileDown, Info } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import DeleteRequestButton from "./DeleteRequestButton";
@@ -96,6 +96,15 @@ export default async function RequestDetailsPage({ params }: { params: { id: str
                                    <Phone className="h-4 w-4 text-muted-foreground" />
                                    <a href={`tel:${request.user.phone}`} className="text-muted-foreground hover:text-primary">{request.user.phone}</a>
                                 </div>
+                                {request.user.description && (
+                                  <>
+                                    <Separator />
+                                    <div className="flex items-start gap-3">
+                                      <Info className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
+                                      <p className="text-muted-foreground text-sm">{request.user.description}</p>
+                                    </div>
+                                  </>
+                                )}
                             </>
                         ) : (
                             <p className="text-muted-foreground">User details not available.</p>

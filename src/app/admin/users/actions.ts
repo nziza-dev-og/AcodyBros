@@ -12,6 +12,8 @@ export interface User {
     email: string;
     phone: string;
     role: 'admin' | 'client';
+    photoURL?: string;
+    description?: string;
 }
 
 export async function getUsers(): Promise<User[]> {
