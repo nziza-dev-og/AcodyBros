@@ -1,8 +1,11 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BotMessageSquare, LayoutTemplate, Smartphone, ShieldCheck, ArrowRight, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const services = [
@@ -41,12 +44,66 @@ export default function Home() {
       quote: "Working with AcodyBros was a breeze. They are true professionals who deliver high-quality work on time. I highly recommend them.",
       avatar: "https://placehold.co/100x100/00FFFF/000000.png?text=SL"
     }
-  ]
+  ];
+
+  const codeLines = [
+    "<script>",
+    "  Alert(' Hello World ');",
+    "",
+    "  console.log( Hello.length )",
+    " }",
+    "</script>"
+  ];
+  const [currentCode, setCurrentCode] = useState('');
+
+  useEffect(() => {
+    let lineIndex = 0;
+    let charIndex = 0;
+    let timeoutId;
+
+    const type = () => {
+        if (lineIndex >= codeLines.length) {
+            timeoutId = setTimeout(() => {
+                setCurrentCode('');
+                lineIndex = 0;
+                charIndex = 0;
+                type();
+            }, 3000);
+            return;
+        }
+
+        const currentLine = codeLines[lineIndex];
+        
+        if (charIndex >= currentLine.length) {
+            setCurrentCode(prev => prev + '\n');
+            lineIndex++;
+            charIndex = 0;
+            timeoutId = setTimeout(type, 400);
+            return;
+        }
+        
+        setCurrentCode(prev => prev + currentLine[charIndex]);
+        charIndex++;
+        timeoutId = setTimeout(type, 40 + Math.random() * 40);
+    };
+    
+    timeoutId = setTimeout(type, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [codeLines]);
 
   return (
     <div className="flex flex-col items-center">
-      <section className="w-full py-20 md:py-28 text-center bg-gradient-to-br from-background via-card to-background bg-[length:200%_200%] animate-gradient-pan">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="relative w-full py-20 md:py-28 text-center bg-gray-900/90 overflow-hidden">
+        <div className="absolute inset-0 w-full h-full bg-gray-950 -z-10">
+            <pre className="text-left p-4 text-xs sm:text-sm md:text-base">
+                <code className="font-code text-green-400/70 whitespace-pre-wrap">
+                    {currentCode}
+                    <span className="animate-blink text-green-400">|</span>
+                </code>
+            </pre>
+        </div>
+        <div className="relative z-10 container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline tracking-tighter mb-4 animate-fade-in-up">
               We Build Your{' '}
@@ -54,14 +111,14 @@ export default function Home() {
                 Digital Future
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
               From sleek websites to intelligent applications, AcodyBros Company delivers excellence in code and design, bringing your ideas to life.
             </p>
             <div className="flex gap-4 justify-center animate-fade-in-up delay-400">
               <Button asChild size="lg" className="font-bold">
                 <Link href="/register">Get Started</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="font-bold">
+              <Button asChild size="lg" variant="outline" className="font-bold border-gray-500 hover:bg-gray-700/50">
                 <Link href="/about">Learn More <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
             </div>
