@@ -1,7 +1,7 @@
 
 'use client';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Bot, Home } from "lucide-react";
+import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,6 +10,7 @@ export default function AdminSidebar() {
     const navItems = [
         { href: "/admin", label: "Dashboard", icon: <LayoutDashboard />, exact: true },
         { href: "/admin/users", label: "Users", icon: <Users /> },
+        { href: "/admin/requests", label: "Requests", icon: <FileText /> },
         { href: "/admin/estimator", label: "AI Estimator", icon: <Bot /> },
     ];
 
