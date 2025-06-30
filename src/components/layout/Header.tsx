@@ -3,13 +3,23 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Code, Menu, Briefcase, User, Wrench, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
@@ -39,13 +49,6 @@ export default function Header() {
     { href: "/", label: "Home", icon: null },
     { href: "/about", label: "About Us", icon: null },
   ];
-
-  const authenticatedNavLinks = [
-    { href: "/dashboard", label: "Client Area", icon: <Briefcase className="h-4 w-4" />, roles: ['client', 'admin'] },
-    { href: "/admin", label: "Admin", icon: <Wrench className="h-4 w-4" />, roles: ['admin'] },
-  ];
-
-  const visibleAuthLinks = authenticatedNavLinks.filter(link => user && link.roles.includes(user.role));
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -95,17 +98,48 @@ export default function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  {user && visibleAuthLinks.map((link) => (
-                     <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setSheetOpen(false)}
-                      className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
-                    >
-                      {link.icon}
-                      {link.label}
-                    </Link>
-                  ))}
+                  {user ? (
+                    <>
+                      <Separator className="my-2" />
+                      <Link
+                        href={user.role === 'admin' ? '/admin' : '/dashboard'}
+                        onClick={() => setSheetOpen(false)}
+                        className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {user.role === 'admin' ? <Wrench className="h-4 w-4" /> : <Briefcase className="h-4 w-4" />}
+                        {user.role === 'admin' ? "Admin Panel" : "Dashboard"}
+                      </Link>
+                      <Link
+                        href="/profile"
+                        onClick={() => setSheetOpen(false)}
+                        className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <User className="h-4 w-4" />
+                        Profile
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          handleLogout();
+                          setSheetOpen(false);
+                        }}
+                        className="justify-start gap-2 p-2"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Separator className="my-2" />
+                      <Button asChild onClick={() => setSheetOpen(false)}>
+                        <Link href="/login">Login</Link>
+                      </Button>
+                      <Button asChild variant="outline" onClick={() => setSheetOpen(false)}>
+                        <Link href="/register">Register</Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -117,20 +151,48 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-2">
             {!loading && (
               user ? (
-                <>
-                  {visibleAuthLinks.map(link => (
-                    <Button asChild variant="ghost" key={link.href}>
-                      <Link href={link.href}>
-                        {link.icon}
-                        {link.label}
-                      </Link>
-                    </Button>
-                  ))}
-                  <Button variant="outline" onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </Button>
-                </>
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage 
+                            src={`https://placehold.co/100x100.png?text=${user.name.charAt(0).toUpperCase()}`} 
+                            alt={user.name} 
+                            data-ai-hint="user avatar"
+                          />
+                          <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                      <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium leading-none">{user.name}</p>
+                          <p className="text-xs leading-none text-muted-foreground">
+                            {user.email}
+                          </p>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                           <Link href={user.role === 'admin' ? "/admin" : "/dashboard"}>
+                            {user.role === 'admin' ? <Wrench className="mr-2 h-4 w-4" /> : <Briefcase className="mr-2 h-4 w-4" />}
+                            <span>{user.role === 'admin' ? "Admin Panel" : "Dashboard"}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/profile">
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Profile</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
               ) : (
                 <>
                   <Button asChild>

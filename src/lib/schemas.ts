@@ -12,3 +12,10 @@ export const projectRequestSchema = z.object({
 });
 
 export type ProjectRequestInput = z.infer<typeof projectRequestSchema>;
+
+export const profileSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  phone: z.string().min(10, { message: "Please enter a valid phone number." }),
+});
+
+export type ProfileInput = z.infer<typeof profileSchema>;
