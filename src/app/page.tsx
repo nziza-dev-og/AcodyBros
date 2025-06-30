@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -8,27 +7,45 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-const codeLines = [
+const allSnippets = [
+  // React Snippet
   [
-    { text: '&lt;script&gt;', color: 'text-gray-400' },
+    [{ text: 'import', color: 'text-purple-400' }, { text: ' React ', color: 'text-blue-400' }, { text: 'from', color: 'text-purple-400' }, { text: ' "react"', color: 'text-teal-300' }, { text: ';', color: 'text-gray-200' }],
+    [],
+    [{ text: 'const', color: 'text-purple-400' }, { text: ' Welcome', color: 'text-green-400' }, { text: ' = (', color: 'text-gray-200' }, { text: '{ name }', color: 'text-blue-400' }, { text: ') => (', color: 'text-gray-200' }],
+    [{ text: '  &lt;h1&gt;', color: 'text-gray-400' }, { text: 'Hello, {name}!', color: 'text-gray-200' }, { text: '&lt;/h1&gt;', color: 'text-gray-400' }],
+    [{ text: ');', color: 'text-gray-200' }],
   ],
+  // Python Snippet
   [
-    { text: "  Alert(", color: 'text-yellow-300' },
-    { text: "'Hello World'", color: 'text-teal-300' },
-    { text: ');', color: 'text-yellow-300' },
+    [{ text: 'def', color: 'text-purple-400' }, { text: ' calculate_fibonacci', color: 'text-yellow-300' }, { text: '(n):', color: 'text-gray-200' }],
+    [{ text: '    a, b = ', color: 'text-gray-200' }, { text: '0', color: 'text-orange-400' }, { text: ', ', color: 'text-gray-200' }, { text: '1', color: 'text-orange-400' }],
+    [{ text: '    while', color: 'text-purple-400' }, { text: ' a < n:', color: 'text-gray-200' }],
+    [{ text: '        print(a, end=', color: 'text-yellow-300' }, { text: "' '", color: 'text-teal-300' }, { text: ')', color: 'text-yellow-300' }],
+    [{ text: '        a, b = b, a+b', color: 'text-gray-200' }],
+    [],
+    [{ text: "calculate_fibonacci(", color: 'text-gray-200' }, {text: '1000', color: 'text-orange-400'}, {text: ')', color: 'text-gray-200'}],
   ],
-  [],
+  // Go Snippet
   [
-    { text: '  console', color: 'text-purple-400' },
-    { text: '.', color: 'text-gray-200' },
-    { text: 'log', color: 'text-yellow-300' },
-    { text: '(', color: 'text-gray-200' },
-    { text: "'AcodyBros'", color: 'text-teal-300' },
-    { text: '.length', color: 'text-blue-400' },
-    { text: ' );', color: 'text-gray-200' },
+    [{ text: 'package', color: 'text-purple-400' }, { text: ' main', color: 'text-gray-200' }],
+    [],
+    [{ text: 'import', color: 'text-purple-400' }, { text: ' "fmt"', color: 'text-teal-300' }],
+    [],
+    [{ text: 'func', color: 'text-purple-400' }, { text: ' main() {', color: 'text-gray-200' }],
+    [{ text: '    fmt.Println(', color: 'text-yellow-300' }, { text: '"Hello, AcodyBros!"', color: 'text-teal-300' }, { text: ')', color: 'text-yellow-300' }],
+    [{ text: '}', color: 'text-gray-200' }],
   ],
-    [
-    { text: '&lt;/script&gt;', color: 'text-gray-400' },
+  // Dart/Flutter Snippet
+  [
+    [{ text: "import 'package:flutter/material.dart';", color: 'text-purple-400' }],
+    [],
+    [{ text: 'class', color: 'text-purple-400' }, { text: ' Greeting', color: 'text-blue-400' }, { text: ' extends', color: 'text-purple-400' }, { text: ' StatelessWidget {', color: 'text-blue-400' }],
+    [{ text: '  @override', color: 'text-yellow-300' }],
+    [{ text: '  Widget', color: 'text-blue-400' }, { text: ' build(BuildContext context) {', color: 'text-gray-200' }],
+    [{ text: '    return', color: 'text-purple-400' }, { text: ' Text(', color: 'text-yellow-300' }, { text: "'We build your digital future.'", color: 'text-teal-300' }, { text: ');', color: 'text-yellow-300' }],
+    [{ text: '  }', color: 'text-gray-200' }],
+    [{ text: '}', color: 'text-gray-200' }],
   ],
 ];
 
@@ -74,24 +91,28 @@ export default function Home() {
   const [currentCodeHtml, setCurrentCodeHtml] = useState('');
 
   useEffect(() => {
+    let snippetIndex = 0;
     let lineIndex = 0;
     let tokenIndex = 0;
     let charIndex = 0;
     let timeoutId: NodeJS.Timeout;
 
     const type = () => {
-      if (lineIndex >= codeLines.length) {
+      const currentSnippet = allSnippets[snippetIndex];
+
+      if (lineIndex >= currentSnippet.length) {
         timeoutId = setTimeout(() => {
           setCurrentCodeHtml('');
           lineIndex = 0;
           tokenIndex = 0;
           charIndex = 0;
+          snippetIndex = (snippetIndex + 1) % allSnippets.length;
           type();
         }, 4000);
         return;
       }
 
-      const currentLine = codeLines[lineIndex];
+      const currentLine = currentSnippet[lineIndex];
 
       if (!currentLine || currentLine.length === 0) {
         setCurrentCodeHtml(prev => prev + '\n');
@@ -99,7 +120,7 @@ export default function Home() {
         timeoutId = setTimeout(type, 400);
         return;
       }
-
+      
       const currentToken = currentLine[tokenIndex];
       
       if (charIndex >= currentToken.text.length) {
@@ -116,14 +137,14 @@ export default function Home() {
       
       let output = '';
       for (let i = 0; i < lineIndex; i++) {
-        const line = codeLines[i];
+        const line = currentSnippet[i];
         if (line) {
           output += line.map(token => `<span class="${token.color}">${token.text}</span>`).join('');
         }
         output += '\n';
       }
 
-      const lineSoFar = codeLines[lineIndex];
+      const lineSoFar = currentSnippet[lineIndex];
       for (let j = 0; j < tokenIndex; j++) {
         output += `<span class="${lineSoFar[j].color}">${lineSoFar[j].text}</span>`;
       }
