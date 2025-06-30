@@ -4,9 +4,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { useToast } from "@/hooks/use-toast";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
   Card,
@@ -44,6 +50,10 @@ const formSchema = z.object({
 });
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,9 +68,41 @@ export default function RegisterPage() {
 
   const isAdmin = form.watch("isAdmin");
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: Implement Firebase registration
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      const { email, password, name, phone, isAdmin } = values;
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name,
+        email,
+        phone,
+        role: isAdmin ? "admin" : "client",
+      });
+
+      toast({
+        title: "Account Created",
+        description: "Your account has been successfully created.",
+      });
+
+      if (isAdmin) {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      console.error("Registration error", error);
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: error.message || "An unexpected error occurred.",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -83,7 +125,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" {...field} />
+                      <Input placeholder="John Doe" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -96,7 +138,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="you@example.com" {...field} />
+                      <Input placeholder="you@example.com" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -109,7 +151,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1 234 567 890" {...field} />
+                      <Input placeholder="+1 234 567 890" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -122,7 +164,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input type="password" placeholder="••••••••" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,6 +182,7 @@ export default function RegisterPage() {
                       <Switch
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={loading}
                       />
                     </FormControl>
                   </FormItem>
@@ -153,15 +196,15 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Admin Secret Code</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter secret code" {...field} />
+                        <Input type="password" placeholder="Enter secret code" {...field} disabled={loading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               )}
-              <Button type="submit" className="w-full font-bold">
-                Register
+              <Button type="submit" className="w-full font-bold" disabled={loading}>
+                {loading ? "Registering..." : "Register"}
               </Button>
             </form>
           </Form>
