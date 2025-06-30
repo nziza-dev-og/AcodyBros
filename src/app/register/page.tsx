@@ -96,10 +96,16 @@ export default function RegisterPage() {
       }
     } catch (error: any) {
       console.error("Registration error", error);
+      let errorMessage = "An unexpected error occurred.";
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "This email is already registered.";
+      } else {
+        errorMessage = error.message;
+      }
       toast({
         variant: "destructive",
         title: "Registration Failed",
-        description: error.message || "An unexpected error occurred.",
+        description: errorMessage,
       });
     } finally {
       setLoading(false);
