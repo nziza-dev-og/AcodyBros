@@ -24,8 +24,7 @@ export async function getProjectRequestsForUser(userId: string): Promise<Project
         const requestsCollectionRef = collection(db, 'projectRequests');
         const q = query(
             requestsCollectionRef, 
-            where('userId', '==', userId), 
-            orderBy('submittedAt', 'desc')
+            where('userId', '==', userId)
         );
         const requestSnapshot = await getDocs(q);
 
@@ -33,6 +32,13 @@ export async function getProjectRequestsForUser(userId: string): Promise<Project
             id: doc.id,
             ...doc.data(),
         })) as ProjectRequest[];
+
+        // Sort by submittedAt descending. This is more robust than a composite Firestore query.
+        requests.sort((a, b) => {
+            const timeA = a.submittedAt?.seconds || 0;
+            const timeB = b.submittedAt?.seconds || 0;
+            return timeB - timeA;
+        });
         
         return requests;
 

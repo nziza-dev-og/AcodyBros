@@ -19,16 +19,24 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchRequests() {
-      if (user) {
+      if (user?.uid) {
         setLoading(true);
-        const userRequests = await getProjectRequestsForUser(user.uid);
-        setRequests(userRequests);
+        try {
+            const userRequests = await getProjectRequestsForUser(user.uid);
+            setRequests(userRequests);
+        } catch (error) {
+            console.error("Failed to fetch project requests:", error);
+            setRequests([]); // Clear requests on error
+        } finally {
+            setLoading(false);
+        }
+      } else {
+        // Handle user logout or initial state where user is not yet available
+        setRequests([]);
         setLoading(false);
       }
     }
-    if (user) {
-        fetchRequests();
-    }
+    fetchRequests();
   }, [user]);
 
   const getBadgeVariant = (status: string) => {
