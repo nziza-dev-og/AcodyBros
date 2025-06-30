@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { LogIn } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -41,6 +43,17 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const { user, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (user.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, authLoading, router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,6 +104,33 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (authLoading || user) {
+     return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12">
+        <Card className="w-full max-w-md shadow-2xl">
+          <CardHeader className="text-center space-y-2">
+            <Skeleton className="h-8 w-48 mx-auto"/>
+            <Skeleton className="h-5 w-64 mx-auto"/>
+          </CardHeader>
+          <CardContent className="space-y-6">
+             <div className="space-y-2">
+                <Skeleton className="h-5 w-16"/>
+                <Skeleton className="h-10 w-full"/>
+             </div>
+             <div className="space-y-2">
+                <Skeleton className="h-5 w-16"/>
+                <Skeleton className="h-10 w-full"/>
+             </div>
+             <Skeleton className="h-10 w-full"/>
+          </CardContent>
+          <CardFooter>
+            <Skeleton className="h-5 w-48 mx-auto"/>
+          </CardFooter>
+        </Card>
+      </div>
+    );
   }
 
   return (

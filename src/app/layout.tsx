@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { headers } from 'next/headers';
+import { AuthProvider } from '@/context/AuthContext';
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ['latin'],
@@ -34,12 +35,14 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className={`${spaceGrotesk.variable} font-body antialiased`}>
-        <div className="flex min-h-screen flex-col">
-          {!isAdminRoute && <Header />}
-          <main className={isAdminRoute ? 'w-full' : 'flex-grow'}>{children}</main>
-          {!isAdminRoute && <Footer />}
-        </div>
-        <Toaster />
+        <AuthProvider>
+          <div className="flex min-h-screen flex-col">
+            {!isAdminRoute && <Header />}
+            <main className={isAdminRoute ? 'w-full' : 'flex-grow'}>{children}</main>
+            {!isAdminRoute && <Footer />}
+          </div>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
