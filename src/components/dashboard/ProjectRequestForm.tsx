@@ -44,7 +44,7 @@ export default function ProjectRequestForm() {
       description: "",
       features: "",
       budget: "",
-      userId: user?.uid || "",
+      userId: "",
     },
   });
   
@@ -146,7 +146,7 @@ export default function ProjectRequestForm() {
               name="budget"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Estimated Budget (Optional)</FormLabel>
+                  <FormLabel>Estimated Budget</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
                     <FormControl>
                       <SelectTrigger>
@@ -159,13 +159,14 @@ export default function ProjectRequestForm() {
                       <SelectItem value="10000-25000">$10,000 - $25,000</SelectItem>
                       <SelectItem value="25000-50000">$25,000 - $50,000</SelectItem>
                       <SelectItem value=">50000">More than $50,000</SelectItem>
+                       <SelectItem value="not-sure">I'm not sure</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={loading || !user} className="w-full font-bold">
+            <Button type="submit" disabled={loading || !user?.uid} className="w-full font-bold">
               {loading ? "Submitting..." : "Submit Request"}
             </Button>
           </form>

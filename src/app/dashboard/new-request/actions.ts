@@ -10,8 +10,9 @@ export async function submitProjectRequest(data: ProjectRequestInput) {
   const validatedFields = projectRequestSchema.safeParse(data);
 
   if (!validatedFields.success) {
+    console.error("Validation failed:", validatedFields.error.flatten().fieldErrors);
     return {
-      error: "Invalid data.",
+      error: "Invalid data. Please check the form and try again.",
     };
   }
   

@@ -81,7 +81,7 @@ export default function DashboardPage() {
                             ) : requests.length > 0 ? requests.map((request) => (
                                 <TableRow key={request.id}>
                                     <TableCell className="font-medium">{request.title}</TableCell>
-                                    <TableCell>{format(new Date(request.submittedAt.seconds * 1000), 'MMM d, yyyy')}</TableCell>
+                                    <TableCell>{request.submittedAt ? format(new Date(request.submittedAt.seconds * 1000), 'MMM d, yyyy') : 'Pending...'}</TableCell>
                                     <TableCell>
                                         <Badge variant={getBadgeVariant(request.status)} className="capitalize">
                                             {request.status}
