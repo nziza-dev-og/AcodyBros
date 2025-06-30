@@ -1,13 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Target, Eye, Code } from "lucide-react";
 import Image from "next/image";
+import { getAdminTeamMembers } from "./actions";
 
-export default function AboutPage() {
-  const teamMembers = [
-    { name: "Imanzi Lutfy", role: "Lead Developer & Co-Founder", avatar: "https://i.pinimg.com/736x/25/5e/6a/255e6a9ce78282a79d736713a65c289b.jpg" },
-    { name: "Nziza Jules", role: "Project Manager & Co-Founder", avatar: "https://i.pinimg.com/736x/42/0a/17/420a17d33407a5fe58dc5e3ad2ee4722.jpg" },
-    { name: "Cassandra Teta", role: "UI/UX Designer & C programmer", avatar: "https://i.pinimg.com/736x/51/c0/1f/51c01f3d91a44d481f619a65b0ce63c8.jpg" },
-  ];
+export default async function AboutPage() {
+  const teamMembers = await getAdminTeamMembers();
 
   const values = [
     { icon: <Target className="w-8 h-8 text-primary" />, title: "Our Mission", description: "To empower businesses with transformative digital solutions, driving growth and innovation through technology." },
@@ -54,13 +51,24 @@ export default function AboutPage() {
       <section className="text-center">
         <h2 className="text-3xl md:text-4xl font-bold font-headline mb-12 flex items-center justify-center gap-3"><Users className="w-10 h-10 text-primary" /> Meet the Team</h2>
         <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {teamMembers.map((member, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <Image src={member.avatar} alt={member.name} width={150} height={150} className="rounded-full mb-4 shadow-md" />
-              <h3 className="text-xl font-bold">{member.name}</h3>
-              <p className="text-primary">{member.role}</p>
-            </div>
-          ))}
+          {teamMembers.length > 0 ? (
+            teamMembers.map((member) => (
+              <div key={member.uid} className="flex flex-col items-center">
+                <Image 
+                  src={member.photoURL || `https://placehold.co/150x150.png`}
+                  alt={member.name} 
+                  width={150} 
+                  height={150} 
+                  className="rounded-full mb-4 shadow-md object-cover"
+                  data-ai-hint="person portrait"
+                />
+                <h3 className="text-xl font-bold">{member.name}</h3>
+                <p className="text-primary capitalize">{member.role}</p>
+              </div>
+            ))
+          ) : (
+             <p className="text-muted-foreground col-span-full">Our team is growing! Check back soon.</p>
+          )}
         </div>
       </section>
     </div>
