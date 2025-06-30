@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -99,7 +100,7 @@ export default function DashboardPage() {
                       ) : requests.length > 0 ? requests.map((request) => (
                           <TableRow key={request.id}>
                               <TableCell className="font-medium">{request.title}</TableCell>
-                              <TableCell className="hidden sm:table-cell">{request.submittedAt ? format(new Date(request.submittedAt.seconds * 1000), 'MMM d, yyyy') : 'Pending...'}</TableCell>
+                              <TableCell className="hidden sm:table-cell">{request.submittedAt ? format(new Date(request.submittedAt), 'MMM d, yyyy') : 'Pending...'}</TableCell>
                               <TableCell>
                                   <Badge variant={getBadgeVariant(request.status)} className="capitalize">
                                       {request.status}

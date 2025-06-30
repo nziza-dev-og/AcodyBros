@@ -2,7 +2,7 @@
 'use server';
 
 import { db, storage } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, query, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, orderBy, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
 import type { User } from '../users/actions';
 import type { ProjectRequest } from '@/app/dashboard/actions';
@@ -19,7 +19,11 @@ export async function getProjectRequests(): Promise<ProjectRequestWithUser[]> {
         const requestSnapshot = await getDocs(q);
 
         const requests = await Promise.all(requestSnapshot.docs.map(async (docSnapshot) => {
-            const requestData = { id: docSnapshot.id, ...docSnapshot.data() } as ProjectRequest;
+            const data = docSnapshot.data();
+            const submittedAtTimestamp = data.submittedAt as Timestamp;
+            const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '';
+
+            const requestData = { id: docSnapshot.id, ...data, submittedAt } as ProjectRequest;
             let user: User | undefined = undefined;
 
             if (requestData.userId) {
@@ -49,7 +53,11 @@ export async function getProjectRequestDetails(id: string): Promise<ProjectReque
             return null;
         }
 
-        const requestData = { id: requestDoc.id, ...requestDoc.data() } as ProjectRequest;
+        const data = requestDoc.data();
+        const submittedAtTimestamp = data.submittedAt as Timestamp;
+        const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '';
+        const requestData = { id: requestDoc.id, ...data, submittedAt } as ProjectRequest;
+        
         let user: User | undefined = undefined;
 
         if (requestData.userId) {

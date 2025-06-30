@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from "react";
@@ -94,7 +95,7 @@ export default function ClientRequestDetailsPage({ params }: { params: { id: str
                                 </Badge>
                             </CardTitle>
                             <CardDescription>
-                            Submitted on {request.submittedAt ? format(new Date(request.submittedAt.seconds * 1000), 'MMMM d, yyyy') : 'N/A'}
+                            Submitted on {request.submittedAt ? format(new Date(request.submittedAt), 'MMMM d, yyyy') : 'N/A'}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">

@@ -2,7 +2,7 @@
 'use server';
 
 import { db, storage } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
 import { revalidatePath } from 'next/cache';
 
@@ -10,10 +10,7 @@ export interface ProjectRequest {
     id: string;
     title: string;
     status: 'pending' | 'approved' | 'in-progress' | 'completed' | 'rejected';
-    submittedAt: {
-        seconds: number;
-        nanoseconds: number;
-    };
+    submittedAt: string;
     [key: string]: any;
 }
 
@@ -28,15 +25,20 @@ export async function getProjectRequestsForUser(userId: string): Promise<Project
         );
         const requestSnapshot = await getDocs(q);
 
-        const requests = requestSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as ProjectRequest[];
+        const requests = requestSnapshot.docs.map(doc => {
+            const data = doc.data();
+            const submittedAtTimestamp = data.submittedAt as Timestamp;
+            return {
+                id: doc.id,
+                ...data,
+                submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '',
+            } as ProjectRequest;
+        });
 
-        // Sort by submittedAt descending. This is more robust than a composite Firestore query.
+        // Sort by submittedAt descending.
         requests.sort((a, b) => {
-            const timeA = a.submittedAt?.seconds || 0;
-            const timeB = b.submittedAt?.seconds || 0;
+            const timeA = a.submittedAt ? new Date(a.submittedAt).getTime() : 0;
+            const timeB = b.submittedAt ? new Date(b.submittedAt).getTime() : 0;
             return timeB - timeA;
         });
         
@@ -59,7 +61,14 @@ export async function getProjectRequestDetails(requestId: string, userId: string
             return null;
         }
 
-        return { id: requestDoc.id, ...requestDoc.data() } as ProjectRequest;
+        const data = requestDoc.data();
+        const submittedAtTimestamp = data.submittedAt as Timestamp;
+
+        return { 
+            id: requestDoc.id, 
+            ...data, 
+            submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '',
+        } as ProjectRequest;
 
     } catch (error) {
         console.error("Error fetching project request details for user: ", error);
