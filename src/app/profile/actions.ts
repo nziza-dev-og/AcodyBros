@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -9,17 +10,17 @@ import { profileSchema } from '@/lib/schemas';
 type ProfileData = z.infer<typeof profileSchema>;
 
 export async function updateUserProfile(userId: string, data: ProfileData) {
-    if (!userId) {
-        return { success: false, error: "User not authenticated." };
-    }
-
-    const validatedFields = profileSchema.safeParse(data);
-
-    if (!validatedFields.success) {
-        return { success: false, error: "Invalid data provided." };
-    }
-
     try {
+        if (!userId) {
+            return { success: false, error: "User not authenticated." };
+        }
+
+        const validatedFields = profileSchema.safeParse(data);
+
+        if (!validatedFields.success) {
+            return { success: false, error: "Invalid data provided." };
+        }
+
         const userDocRef = doc(db, 'users', userId);
         await updateDoc(userDocRef, validatedFields.data);
 

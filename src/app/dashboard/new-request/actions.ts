@@ -9,31 +9,31 @@ import { projectRequestSchema } from "@/lib/schemas";
 import { z } from "zod";
 
 export async function submitProjectRequest(formData: FormData) {
-  const rawData = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    features: formData.get("features"),
-    budget: formData.get("budget"),
-    userId: formData.get("userId"),
-  };
-  
-  const validationSchema = projectRequestSchema.omit({ documentUrl: true, documentName: true });
-  const validatedFields = validationSchema.safeParse(rawData);
-
-  if (!validatedFields.success) {
-    console.error("Validation failed:", validatedFields.error.flatten().fieldErrors);
-    return {
-      error: "Invalid data. Please check the form and try again.",
-    };
-  }
-
-  const file = formData.get("file") as File | null;
-  const fileUrl = formData.get("fileUrl") as string | null;
-
-  let documentUrl: string | undefined = undefined;
-  let documentName: string | undefined = undefined;
-
   try {
+    const rawData = {
+      title: formData.get("title"),
+      description: formData.get("description"),
+      features: formData.get("features"),
+      budget: formData.get("budget"),
+      userId: formData.get("userId"),
+    };
+    
+    const validationSchema = projectRequestSchema.omit({ documentUrl: true, documentName: true });
+    const validatedFields = validationSchema.safeParse(rawData);
+
+    if (!validatedFields.success) {
+      console.error("Validation failed:", validatedFields.error.flatten().fieldErrors);
+      return {
+        error: "Invalid data. Please check the form and try again.",
+      };
+    }
+
+    const file = formData.get("file") as File | null;
+    const fileUrl = formData.get("fileUrl") as string | null;
+
+    let documentUrl: string | undefined = undefined;
+    let documentName: string | undefined = undefined;
+
     if (file && file.size > 0) {
       const storageRef = ref(storage, `project-docs/${validatedFields.data.userId}/${Date.now()}-${file.name}`);
       const snapshot = await uploadBytes(storageRef, file);
