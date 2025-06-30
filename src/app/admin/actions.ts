@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export async function getDashboardStats() {
     try {
@@ -10,8 +10,12 @@ export async function getDashboardStats() {
         const userSnapshot = await getDocs(usersCollectionRef);
         const totalUsers = userSnapshot.size;
 
+        const requestsCollectionRef = collection(db, 'projectRequests');
+        const q = query(requestsCollectionRef, where('status', '==', 'pending'));
+        const requestSnapshot = await getDocs(q);
+        const projectRequests = requestSnapshot.size;
+        
         // Placeholders for now
-        const projectRequests = 0;
         const openProjects = 0;
 
         return {
