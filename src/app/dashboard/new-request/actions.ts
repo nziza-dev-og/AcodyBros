@@ -4,7 +4,7 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
-import { projectRequestSchema, type ProjectRequestInput } from "@/components/dashboard/ProjectRequestForm";
+import { projectRequestSchema, type ProjectRequestInput } from "@/lib/schemas";
 
 export async function submitProjectRequest(data: ProjectRequestInput) {
   const validatedFields = projectRequestSchema.safeParse(data);
