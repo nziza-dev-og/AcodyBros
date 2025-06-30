@@ -3,7 +3,7 @@ import { Bot } from "lucide-react";
 
 export default function EstimatorPage() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 md:px-6">
+    <div className="container mx-auto max-w-4xl px-4 py-12 md:py-16 md:px-6">
       <div className="text-center mb-12">
         <div className="flex justify-center items-center gap-4 mb-4">
             <Bot className="h-12 w-12 text-primary" />

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from "react";
@@ -55,7 +54,7 @@ export default function ClientRequestDetailsPage({ params }: { params: { id: str
 
     if (loading || authLoading || !request) {
         return (
-            <div className="container mx-auto max-w-4xl px-4 py-16 md:px-6 space-y-6">
+            <div className="container mx-auto max-w-4xl px-4 py-12 md:py-16 md:px-6 space-y-6">
                 <Card>
                     <CardHeader>
                         <Skeleton className="h-8 w-3/4" />
@@ -78,7 +77,7 @@ export default function ClientRequestDetailsPage({ params }: { params: { id: str
     }
 
     return (
-        <div className="container mx-auto max-w-4xl px-4 py-16 md:px-6">
+        <div className="container mx-auto max-w-4xl px-4 py-12 md:py-16 md:px-6">
              <Button asChild variant="outline" className="mb-8">
                 <Link href="/dashboard">
                     &larr; Back to Dashboard

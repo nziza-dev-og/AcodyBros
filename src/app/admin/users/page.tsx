@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,8 +20,8 @@ export default async function UsersPage() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
+                            <TableHead className="hidden md:table-cell">Email</TableHead>
+                            <TableHead className="hidden sm:table-cell">Phone</TableHead>
                             <TableHead>Role</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -31,8 +30,8 @@ export default async function UsersPage() {
                         {users.length > 0 ? users.map((user: User) => (
                             <TableRow key={user.uid}>
                                 <TableCell className="font-medium">{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.phone}</TableCell>
+                                <TableCell className="hidden md:table-cell">{user.email}</TableCell>
+                                <TableCell className="hidden sm:table-cell">{user.phone}</TableCell>
                                 <TableCell>
                                     <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                                         {user.role}

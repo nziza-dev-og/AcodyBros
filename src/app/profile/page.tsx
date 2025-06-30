@@ -64,7 +64,7 @@ export default function ProfilePage() {
 
   if (authLoading || !user) {
     return (
-        <div className="container mx-auto max-w-2xl px-4 py-16 md:px-6">
+        <div className="container mx-auto max-w-2xl px-4 py-12 md:py-16 md:px-6">
              <Card>
                 <CardHeader>
                     <Skeleton className="h-8 w-48"/>
@@ -82,7 +82,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-16 md:px-6">
+    <div className="container mx-auto max-w-2xl px-4 py-12 md:py-16 md:px-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-3xl">

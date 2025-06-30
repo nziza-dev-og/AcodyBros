@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,7 +43,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 md:px-6">
+    <div className="container mx-auto px-4 py-12 md:py-16 md:px-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 gap-4">
         <div className="flex-1">
             <h1 className="text-4xl md:text-5xl font-bold font-headline">Client Dashboard</h1>

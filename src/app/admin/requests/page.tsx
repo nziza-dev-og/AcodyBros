@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,8 +34,8 @@ export default async function RequestsPage() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Project Title</TableHead>
-                            <TableHead>Client</TableHead>
-                            <TableHead>Submitted</TableHead>
+                            <TableHead className="hidden sm:table-cell">Client</TableHead>
+                            <TableHead className="hidden md:table-cell">Submitted</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -45,8 +44,8 @@ export default async function RequestsPage() {
                         {requests.length > 0 ? requests.map((request: ProjectRequestWithUser) => (
                             <TableRow key={request.id}>
                                 <TableCell className="font-medium">{request.title}</TableCell>
-                                <TableCell>{request.user?.name ?? 'Unknown User'}</TableCell>
-                                <TableCell>{request.submittedAt ? format(new Date(request.submittedAt.seconds * 1000), 'MMM d, yyyy') : 'N/A'}</TableCell>
+                                <TableCell className="hidden sm:table-cell">{request.user?.name ?? 'Unknown User'}</TableCell>
+                                <TableCell className="hidden md:table-cell">{request.submittedAt ? format(new Date(request.submittedAt.seconds * 1000), 'MMM d, yyyy') : 'N/A'}</TableCell>
                                 <TableCell>
                                     <Badge variant={getBadgeVariant(request.status)} className="capitalize">
                                         {request.status}

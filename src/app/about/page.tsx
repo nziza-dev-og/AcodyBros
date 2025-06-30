@@ -16,7 +16,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-16 md:px-6">
+    <div className="container mx-auto px-4 py-12 md:py-16 md:px-6">
       <section className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">About AcodyBros Connect</h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
