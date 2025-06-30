@@ -3,9 +3,6 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import { headers } from 'next/headers';
 import { AuthProvider } from '@/context/AuthContext';
 
 const spaceGrotesk = Space_Grotesk({ 
@@ -23,10 +20,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = headers();
-  const pathname = headersList.get('next-url') || "";
-  const isAdminRoute = pathname.startsWith('/admin');
-
   return (
     <html lang="en" className="dark">
       <head>
@@ -36,13 +29,9 @@ export default function RootLayout({
       </head>
       <body className={`${spaceGrotesk.variable} font-body antialiased`}>
         <AuthProvider>
-          <div className="flex min-h-screen flex-col">
-            {!isAdminRoute && <Header />}
-            <main className={isAdminRoute ? 'w-full' : 'flex-grow'}>{children}</main>
-            {!isAdminRoute && <Footer />}
-          </div>
-          <Toaster />
+          {children}
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

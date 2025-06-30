@@ -5,6 +5,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
+import { usePathname } from 'next/navigation';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export interface User {
     uid: string;
@@ -26,6 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+  const isAdminRoute = pathname.startsWith('/admin');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -59,7 +64,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {isAdminRoute ? (
+        <>{children}</>
+      ) : (
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </div>
+      )}
     </AuthContext.Provider>
   );
 };
