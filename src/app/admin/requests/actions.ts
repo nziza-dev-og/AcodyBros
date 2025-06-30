@@ -1,8 +1,9 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, query, orderBy, updateDoc } from 'firebase/firestore';
+import { db, storage } from '@/lib/firebase';
+import { collection, getDocs, doc, getDoc, query, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
+import { ref, deleteObject } from 'firebase/storage';
 import type { User } from '../users/actions';
 import type { ProjectRequest } from '@/app/dashboard/actions';
 import { revalidatePath } from 'next/cache';
@@ -80,5 +81,39 @@ export async function updateRequestStatus(requestId: string, status: ProjectRequ
     } catch (error) {
         console.error("Error updating request status: ", error);
         return { success: false, error: "Failed to update status." };
+    }
+}
+
+export async function deleteProjectRequest(requestId: string) {
+    try {
+        const requestDocRef = doc(db, 'projectRequests', requestId);
+        const requestDoc = await getDoc(requestDocRef);
+
+        if (!requestDoc.exists()) {
+            return { success: false, error: "Request not found." };
+        }
+        
+        const requestData = requestDoc.data();
+
+        if (requestData.documentUrl) {
+            try {
+                const fileRef = ref(storage, requestData.documentUrl);
+                await deleteObject(fileRef);
+            } catch (storageError: any) {
+                 if (storageError.code !== 'storage/object-not-found') {
+                    console.error("Error deleting file from storage: ", storageError);
+                 }
+            }
+        }
+
+        await deleteDoc(requestDocRef);
+        
+        revalidatePath('/admin/requests');
+        revalidatePath('/dashboard');
+
+        return { success: true };
+    } catch (error) {
+        console.error("Error deleting request: ", error);
+        return { success: false, error: "Failed to delete request." };
     }
 }

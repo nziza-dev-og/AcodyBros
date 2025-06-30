@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getUsers, type User } from "./actions";
+import DeleteUserButton from "./DeleteUserButton";
 
 export default async function UsersPage() {
     const users = await getUsers();
@@ -23,6 +24,7 @@ export default async function UsersPage() {
                             <TableHead>Email</TableHead>
                             <TableHead>Phone</TableHead>
                             <TableHead>Role</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -36,10 +38,13 @@ export default async function UsersPage() {
                                         {user.role}
                                     </Badge>
                                 </TableCell>
+                                <TableCell className="text-right">
+                                    <DeleteUserButton userId={user.uid} />
+                                </TableCell>
                             </TableRow>
                         )) : (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center">
+                                <TableCell colSpan={5} className="h-24 text-center">
                                     No users found.
                                 </TableCell>
                             </TableRow>

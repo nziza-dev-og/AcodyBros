@@ -9,6 +9,7 @@ import UpdateRequestStatus from "./UpdateRequestStatus";
 import { Briefcase, ListChecks, DollarSign, User, Mail, Phone, FileDown } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
+import DeleteRequestButton from "./DeleteRequestButton";
 
 export default async function RequestDetailsPage({ params }: { params: { id: string } }) {
     const request = await getProjectRequestDetails(params.id);
@@ -104,10 +105,12 @@ export default async function RequestDetailsPage({ params }: { params: { id: str
                 <Card>
                     <CardHeader>
                         <CardTitle>Actions</CardTitle>
-                        <CardDescription>Update the status of this request.</CardDescription>
+                        <CardDescription>Update or remove this request.</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                        <UpdateRequestStatus requestId={request.id} currentStatus={request.status} />
+                       <Separator />
+                       <DeleteRequestButton requestId={request.id} />
                     </CardContent>
                 </Card>
             </div>
