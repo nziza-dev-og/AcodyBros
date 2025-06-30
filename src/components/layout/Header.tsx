@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { Code, Menu, Briefcase, User, Wrench, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -156,7 +156,7 @@ export default function Header() {
                       <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                         <Avatar className="h-10 w-10">
                           <AvatarImage 
-                            src={`https://placehold.co/100x100.png?text=${user.name.charAt(0).toUpperCase()}`} 
+                            src={user.photoURL} 
                             alt={user.name} 
                             data-ai-hint="user avatar"
                           />

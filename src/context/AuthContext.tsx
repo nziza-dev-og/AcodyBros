@@ -15,6 +15,7 @@ export interface User {
     email: string;
     phone: string;
     role: 'admin' | 'client';
+    photoURL?: string;
 }
 
 interface AuthContextType {

@@ -4,9 +4,9 @@ import Image from "next/image";
 
 export default function AboutPage() {
   const teamMembers = [
-    { name: "Cody Bro", role: "Lead Developer & Co-Founder", avatar: "https://placehold.co/150x150/7DF9FF/000000.png?text=CB" },
-    { name: "Andy Bro", role: "Project Manager & Co-Founder", avatar: "https://placehold.co/150x150/00FFFF/000000.png?text=AB" },
-    { name: "Sissy Bro", role: "UI/UX Designer", avatar: "https://placehold.co/150x150/FFFFFF/000000.png?text=SB" },
+    { name: "Imanzi Lutfy", role: "Lead Developer & Co-Founder", avatar: "https://i.pinimg.com/736x/25/5e/6a/255e6a9ce78282a79d736713a65c289b.jpg" },
+    { name: "Nziza Jules", role: "Project Manager & Co-Founder", avatar: "https://i.pinimg.com/736x/42/0a/17/420a17d33407a5fe58dc5e3ad2ee4722.jpg" },
+    { name: "Cassandra Teta", role: "UI/UX Designer & C programmer", avatar: "https://i.pinimg.com/736x/51/c0/1f/51c01f3d91a44d481f619a65b0ce63c8.jpg" },
   ];
 
   const values = [
@@ -26,7 +26,7 @@ export default function AboutPage() {
 
       <section className="mb-20">
         <Image 
-          src="https://placehold.co/1200x500.png"
+          src="https://i.pinimg.com/736x/c8/7a/a5/c87aa5a2adc0ac60659100f3e880aa41.jpg"
           alt="AcodyBros Team"
           width={1200}
           height={500}
