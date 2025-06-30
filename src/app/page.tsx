@@ -45,11 +45,14 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <section className="w-full py-20 md:py-28 bg-background text-center">
+      <section className="w-full py-20 md:py-28 text-center bg-gradient-to-br from-background via-card to-background bg-[length:200%_200%] animate-gradient-pan">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline tracking-tighter mb-4 animate-fade-in-up">
-              We Build Your <span className="text-primary">Digital Future</span>
+              We Build Your{' '}
+              <span className="inline-block animate-shine bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] bg-clip-text text-transparent">
+                Digital Future
+              </span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
               From sleek websites to intelligent applications, AcodyBros Company delivers excellence in code and design, bringing your ideas to life.
