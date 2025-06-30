@@ -26,7 +26,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ProjectEstimatorInput, ProjectEstimatorOutput } from "@/ai/flows/project-estimator";
-import { getProjectEstimate } from "./estimator/actions";
+import { getProjectEstimate } from "@/app/admin/estimator/actions";
 import { AlertCircle, CheckCircle2, Clock, DollarSign, Puzzle, FileText } from "lucide-react";
 
 const formSchema = z.object({
