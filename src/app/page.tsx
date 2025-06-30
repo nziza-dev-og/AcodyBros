@@ -8,14 +8,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-// Define codeLines outside the component to prevent it from being recreated on every render.
 const codeLines = [
-  "<script>",
-  "  Alert(' Hello World ');",
-  "",
-  "  console.log( Hello.length )",
-  " }",
-  "</script>"
+  [
+    { text: '&lt;script&gt;', color: 'text-gray-400' },
+  ],
+  [
+    { text: "  Alert(", color: 'text-yellow-300' },
+    { text: "'Hello World'", color: 'text-teal-300' },
+    { text: ');', color: 'text-yellow-300' },
+  ],
+  [],
+  [
+    { text: '  console', color: 'text-purple-400' },
+    { text: '.', color: 'text-gray-200' },
+    { text: 'log', color: 'text-yellow-300' },
+    { text: '(', color: 'text-gray-200' },
+    { text: "'AcodyBros'", color: 'text-teal-300' },
+    { text: '.length', color: 'text-blue-400' },
+    { text: ' );', color: 'text-gray-200' },
+  ],
+    [
+    { text: '&lt;/script&gt;', color: 'text-gray-400' },
+  ],
 ];
 
 export default function Home() {
@@ -57,60 +71,88 @@ export default function Home() {
     }
   ];
 
-  const [currentCode, setCurrentCode] = useState('');
+  const [currentCodeHtml, setCurrentCodeHtml] = useState('');
 
   useEffect(() => {
     let lineIndex = 0;
+    let tokenIndex = 0;
     let charIndex = 0;
     let timeoutId: NodeJS.Timeout;
 
     const type = () => {
-        if (lineIndex >= codeLines.length) {
-            // After finishing all lines, wait for 3 seconds then restart
-            timeoutId = setTimeout(() => {
-                setCurrentCode('');
-                lineIndex = 0;
-                charIndex = 0;
-                type();
-            }, 3000);
-            return;
-        }
+      if (lineIndex >= codeLines.length) {
+        timeoutId = setTimeout(() => {
+          setCurrentCodeHtml('');
+          lineIndex = 0;
+          tokenIndex = 0;
+          charIndex = 0;
+          type();
+        }, 4000);
+        return;
+      }
 
-        const currentLine = codeLines[lineIndex];
-        
-        if (charIndex >= currentLine.length) {
-            // End of line, add a newline character
-            setCurrentCode(prev => prev + '\n');
-            lineIndex++;
-            charIndex = 0;
-            // Wait a bit longer before starting the next line
-            timeoutId = setTimeout(type, 400);
-            return;
+      const currentLine = codeLines[lineIndex];
+
+      if (!currentLine || currentLine.length === 0) {
+        setCurrentCodeHtml(prev => prev + '\n');
+        lineIndex++;
+        timeoutId = setTimeout(type, 400);
+        return;
+      }
+
+      const currentToken = currentLine[tokenIndex];
+      
+      if (charIndex >= currentToken.text.length) {
+        tokenIndex++;
+        charIndex = 0;
+        if (tokenIndex >= currentLine.length) {
+          setCurrentCodeHtml(prev => prev + '\n');
+          lineIndex++;
+          tokenIndex = 0;
         }
-        
-        // Type the next character
-        setCurrentCode(prev => prev + currentLine[charIndex]);
-        charIndex++;
-        // Randomize typing speed a bit
-        timeoutId = setTimeout(type, 40 + Math.random() * 40);
+        timeoutId = setTimeout(type, 100 + Math.random() * 100);
+        return;
+      }
+      
+      let output = '';
+      for (let i = 0; i < lineIndex; i++) {
+        const line = codeLines[i];
+        if (line) {
+          output += line.map(token => `<span class="${token.color}">${token.text}</span>`).join('');
+        }
+        output += '\n';
+      }
+
+      const lineSoFar = codeLines[lineIndex];
+      for (let j = 0; j < tokenIndex; j++) {
+        output += `<span class="${lineSoFar[j].color}">${lineSoFar[j].text}</span>`;
+      }
+
+      const partialToken = lineSoFar[tokenIndex];
+      if (partialToken) {
+        output += `<span class="${partialToken.color}">${partialToken.text.substring(0, charIndex + 1)}</span>`;
+      }
+
+      setCurrentCodeHtml(output);
+
+      charIndex++;
+      timeoutId = setTimeout(type, 40 + Math.random() * 40);
     };
-    
-    // Start the animation after a short delay
+
     timeoutId = setTimeout(type, 1000);
 
-    // Cleanup function to clear the timeout when the component unmounts
     return () => clearTimeout(timeoutId);
-  }, []); // Use an empty dependency array to run the effect only once on mount.
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
       <section className="relative w-full py-20 md:py-28 text-center bg-gray-900/90 overflow-hidden">
         <div className="absolute inset-0 w-full h-full bg-gray-950 -z-10">
             <pre className="text-left p-4 text-xs sm:text-sm md:text-base">
-                <code className="font-code text-green-400/70 whitespace-pre-wrap">
-                    {currentCode}
-                    <span className="animate-blink text-green-400">|</span>
-                </code>
+                <code
+                  className="font-code whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{ __html: currentCodeHtml + '<span class="animate-blink text-green-400">|</span>' }}
+                />
             </pre>
         </div>
         <div className="relative z-10 container mx-auto px-4 md:px-6">
