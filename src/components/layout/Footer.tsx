@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import Image from "next/image";
 import { Github, Linkedin, Twitter } from "lucide-react";
@@ -11,7 +10,7 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex flex-col items-start">
             <Link href="/" className="flex items-center mb-4">
-              <Image src={blandLogo} alt="Logo" width={32} height={32} />
+              <Image src={blandLogo} alt="Logo" width={40} height={40} />
             </Link>
             <p className="text-sm text-muted-foreground">
               Building the future, one line of code at a time.

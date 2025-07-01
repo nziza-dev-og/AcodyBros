@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -54,10 +53,10 @@ export default function Header() {
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-16 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center">
-            <Image src={blandLogo} alt="Logo" width={32} height={32} />
+            <Image src={blandLogo} alt="Logo" width={40} height={40} />
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
@@ -85,7 +84,7 @@ export default function Header() {
                 <SheetTitle className="sr-only">Menu</SheetTitle>
                 <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
                 <Link href="/" className="flex items-center mb-6" onClick={() => setSheetOpen(false)}>
-                   <Image src={blandLogo} alt="Logo" width={32} height={32} />
+                   <Image src={blandLogo} alt="Logo" width={40} height={40} />
                 </Link>
                 <div className="flex flex-col space-y-3">
                   {navLinks.map((link) => (
@@ -145,7 +144,7 @@ export default function Header() {
             </Sheet>
           </div>
           <Link href="/" className="flex items-center md:hidden">
-            <Image src={blandLogo} alt="Logo" width={32} height={32} />
+            <Image src={blandLogo} alt="Logo" width={40} height={40} />
           </Link>
           <nav className="hidden md:flex items-center space-x-2">
             {!loading && (

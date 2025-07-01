@@ -1,4 +1,3 @@
-
 'use client';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
@@ -21,7 +20,7 @@ export default function AdminSidebar() {
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
                     <Link href="/">
-                        <Image src={blandLogo} alt="Logo" width={28} height={28} />
+                        <Image src={blandLogo} alt="Logo" width={36} height={36} />
                     </Link>
                 </div>
             </SidebarHeader>
