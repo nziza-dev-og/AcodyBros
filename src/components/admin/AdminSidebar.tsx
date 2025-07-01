@@ -20,7 +20,7 @@ export default function AdminSidebar() {
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
                     <Link href="/">
-                        <Image src={blandLogo} alt="Logo" width={36} height={36} />
+                        <Image src={blandLogo} alt="Logo" width={80} height={80} />
                     </Link>
                 </div>
             </SidebarHeader>
