@@ -1,8 +1,9 @@
 
 'use client';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Bot, FileText, Code } from "lucide-react";
+import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function AdminSidebar() {
@@ -19,7 +20,7 @@ export default function AdminSidebar() {
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
                     <Link href="/" className="flex items-center gap-2">
-                        <Code className="h-7 w-7 text-primary" />
+                        <Image src="/logo.png" alt="AcodyBros Logo" width={28} height={28} />
                         <span className="font-bold text-xl">AcodyBros</span>
                     </Link>
                 </div>

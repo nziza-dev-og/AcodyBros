@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Code } from "lucide-react";
+import Image from "next/image";
+import { Github, Linkedin, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex flex-col items-start">
             <Link href="/" className="flex items-center mb-4 gap-2">
-              <Code className="h-7 w-7 text-primary" />
+              <Image src="/logo.png" alt="AcodyBros Connect Logo" width={32} height={32} />
               <span className="font-bold text-xl">AcodyBros Connect</span>
             </Link>
             <p className="text-sm text-muted-foreground">
