@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex flex-col items-start">
             <Link href="/" className="flex items-center mb-4">
-              <Image src={blandLogo} alt="Logo" width={40} height={40} />
+              <Image src={blandLogo} alt="Logo" width={60} height={60} />
             </Link>
             <p className="text-sm text-muted-foreground">
               Building the future, one line of code at a time.
