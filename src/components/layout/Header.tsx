@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Briefcase, User, Wrench, LogOut } from "lucide-react";
+import { Menu, Briefcase, User, Wrench, LogOut, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
@@ -51,6 +51,9 @@ export default function Header() {
     { href: "/about", label: "About Us", icon: null },
   ];
   
+  const dashboardLink = user?.role === 'admin' ? '/admin' : '/dashboard';
+  const chatLink = user?.role === 'admin' ? '/admin/chat' : '/dashboard/chat';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
@@ -84,7 +87,7 @@ export default function Header() {
                 <SheetTitle className="sr-only">Menu</SheetTitle>
                 <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
                 <Link href="/" className="flex items-center mb-6" onClick={() => setSheetOpen(false)}>
-                   <Image src={blandLogo} alt="Logo" width={40} height={40} />
+                   <Image src={blandLogo} alt="Logo" width={120} height={120} />
                 </Link>
                 <div className="flex flex-col space-y-3">
                   {navLinks.map((link) => (
@@ -101,12 +104,20 @@ export default function Header() {
                     <>
                       <Separator className="my-2" />
                       <Link
-                        href={user.role === 'admin' ? '/admin' : '/dashboard'}
+                        href={dashboardLink}
                         onClick={() => setSheetOpen(false)}
                         className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
                       >
                         {user.role === 'admin' ? <Wrench className="h-4 w-4" /> : <Briefcase className="h-4 w-4" />}
                         {user.role === 'admin' ? "Admin Panel" : "Dashboard"}
+                      </Link>
+                      <Link
+                        href={chatLink}
+                        onClick={() => setSheetOpen(false)}
+                        className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                        Chat
                       </Link>
                       <Link
                         href="/profile"
@@ -144,7 +155,7 @@ export default function Header() {
             </Sheet>
           </div>
           <Link href="/" className="flex items-center md:hidden">
-            <Image src={blandLogo} alt="Logo" width={40} height={40} />
+            <Image src={blandLogo} alt="Logo" width={120} height={120} />
           </Link>
           <nav className="hidden md:flex items-center space-x-2">
             {!loading && (
@@ -173,9 +184,15 @@ export default function Header() {
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                           <Link href={user.role === 'admin' ? "/admin" : "/dashboard"}>
+                           <Link href={dashboardLink}>
                             {user.role === 'admin' ? <Wrench className="mr-2 h-4 w-4" /> : <Briefcase className="mr-2 h-4 w-4" />}
                             <span>{user.role === 'admin' ? "Admin Panel" : "Dashboard"}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                         <DropdownMenuItem asChild>
+                           <Link href={chatLink}>
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Chat</span>
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>

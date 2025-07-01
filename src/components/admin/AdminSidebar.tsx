@@ -1,6 +1,6 @@
 'use client';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
+import { LayoutDashboard, Users, Bot, FileText, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -12,6 +12,7 @@ export default function AdminSidebar() {
         { href: "/admin", label: "Dashboard", icon: <LayoutDashboard />, exact: true },
         { href: "/admin/users", label: "Users", icon: <Users /> },
         { href: "/admin/requests", label: "Requests", icon: <FileText /> },
+        { href: "/admin/chat", label: "Chat", icon: <MessageSquare /> },
         { href: "/admin/estimator", label: "AI Estimator", icon: <Bot /> },
     ];
 
