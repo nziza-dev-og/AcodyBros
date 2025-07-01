@@ -26,6 +26,7 @@ export async function updateUserProfile(userId: string, data: ProfileData) {
 
         revalidatePath('/profile');
         revalidatePath('/admin/users');
+        revalidatePath('/about');
 
         return { success: true, message: "Profile updated successfully." };
     } catch (error) {
