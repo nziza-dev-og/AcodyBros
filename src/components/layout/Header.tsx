@@ -56,7 +56,7 @@ export default function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center">
-            <Image src={blandLogo} alt="Logo" width={80} height={80} />
+            <Image src={blandLogo} alt="Logo" width={120} height={120} />
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
