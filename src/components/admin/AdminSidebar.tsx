@@ -19,9 +19,8 @@ export default function AdminSidebar() {
         <Sidebar>
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/">
                         <Image src="/logo.png" alt="AcodyBros Logo" width={28} height={28} />
-                        <span className="font-bold text-xl">AcodyBros</span>
                     </Link>
                 </div>
             </SidebarHeader>

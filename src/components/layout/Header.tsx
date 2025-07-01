@@ -55,9 +55,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href="/" className="mr-6 flex items-center">
             <Image src="/logo.png" alt="AcodyBros Connect Logo" width={32} height={32} />
-            <span className="font-bold text-lg">AcodyBros Connect</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
@@ -84,9 +83,8 @@ export default function Header() {
               <SheetContent side="left" className="pr-0">
                 <SheetTitle className="sr-only">Menu</SheetTitle>
                 <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
-                <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setSheetOpen(false)}>
+                <Link href="/" className="flex items-center mb-6" onClick={() => setSheetOpen(false)}>
                    <Image src="/logo.png" alt="AcodyBros Connect Logo" width={32} height={32} />
-                   <span className="font-bold text-lg">AcodyBros Connect</span>
                 </Link>
                 <div className="flex flex-col space-y-3">
                   {navLinks.map((link) => (
@@ -145,9 +143,8 @@ export default function Header() {
               </SheetContent>
             </Sheet>
           </div>
-          <Link href="/" className="flex items-center space-x-2 md:hidden">
+          <Link href="/" className="flex items-center md:hidden">
             <Image src="/logo.png" alt="AcodyBros Connect Logo" width={32} height={32} />
-            <span className="font-bold">AcodyBros Connect</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-2">
             {!loading && (
