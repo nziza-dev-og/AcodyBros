@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'AcodyBros Connect',
   description: 'We build your digital future.',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/bland.png',
   },
 };
 
