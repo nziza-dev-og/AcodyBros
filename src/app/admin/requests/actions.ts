@@ -21,7 +21,7 @@ export async function getProjectRequests(): Promise<ProjectRequestWithUser[]> {
         const requests = await Promise.all(requestSnapshot.docs.map(async (docSnapshot) => {
             const data = docSnapshot.data();
             const submittedAtTimestamp = data.submittedAt as Timestamp;
-            const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '';
+            const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : null;
 
             const requestData = { id: docSnapshot.id, ...data, submittedAt } as ProjectRequest;
             let user: User | undefined = undefined;
@@ -55,7 +55,7 @@ export async function getProjectRequestDetails(id: string): Promise<ProjectReque
 
         const data = requestDoc.data();
         const submittedAtTimestamp = data.submittedAt as Timestamp;
-        const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '';
+        const submittedAt = submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : null;
         const requestData = { id: requestDoc.id, ...data, submittedAt } as ProjectRequest;
         
         let user: User | undefined = undefined;

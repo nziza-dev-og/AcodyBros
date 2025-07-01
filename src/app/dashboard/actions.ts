@@ -10,7 +10,7 @@ export interface ProjectRequest {
     id: string;
     title: string;
     status: 'pending' | 'approved' | 'in-progress' | 'completed' | 'rejected';
-    submittedAt: string;
+    submittedAt: string | null;
     [key: string]: any;
 }
 
@@ -31,7 +31,7 @@ export async function getProjectRequestsForUser(userId: string): Promise<Project
             return {
                 id: doc.id,
                 ...data,
-                submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '',
+                submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : null,
             } as ProjectRequest;
         });
 
@@ -67,7 +67,7 @@ export async function getProjectRequestDetails(requestId: string, userId: string
         return { 
             id: requestDoc.id, 
             ...data, 
-            submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : '',
+            submittedAt: submittedAtTimestamp?.toDate ? submittedAtTimestamp.toDate().toISOString() : null,
         } as ProjectRequest;
 
     } catch (error) {
