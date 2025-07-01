@@ -1,5 +1,6 @@
 
 'use client';
+import Image from "next/image";
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
 import Link from "next/link";
@@ -17,7 +18,9 @@ export default function AdminSidebar() {
     return (
         <Sidebar>
             <SidebarHeader>
-                <h2 className="text-xl font-bold p-2 text-center group-data-[collapsible=icon]:hidden">AcodyBros</h2>
+                 <div className="flex justify-center p-2 group-data-[collapsible=icon]:hidden">
+                    <Image src="/logo.png" alt="AcodyBros Logo" width={140} height={50} className="object-contain" />
+                </div>
             </SidebarHeader>
             <SidebarMenu>
                 {navItems.map(item => (

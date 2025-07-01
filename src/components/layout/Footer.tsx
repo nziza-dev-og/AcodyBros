@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Code, Github, Linkedin, Twitter } from "lucide-react";
+import Image from "next/image";
+import { Github, Linkedin, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -7,9 +8,8 @@ export default function Footer() {
       <div className="container mx-auto py-8 px-4 md:px-6">
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex flex-col items-start">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Code className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">AcodyBros Connect</span>
+            <Link href="/" className="flex items-center mb-4">
+              <Image src="/logo.png" alt="AcodyBros Connect Logo" width={180} height={64} className="object-contain" />
             </Link>
             <p className="text-sm text-muted-foreground">
               Building the future, one line of code at a time.
