@@ -5,6 +5,7 @@ import { LayoutDashboard, Users, Bot, FileText } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import blandLogo from "@/app/bland.png";
 
 export default function AdminSidebar() {
     const pathname = usePathname();
@@ -20,7 +21,7 @@ export default function AdminSidebar() {
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
                     <Link href="/">
-                        <Image src="/bland.png" alt="Logo" width={28} height={28} />
+                        <Image src={blandLogo} alt="Logo" width={28} height={28} />
                     </Link>
                 </div>
             </SidebarHeader>

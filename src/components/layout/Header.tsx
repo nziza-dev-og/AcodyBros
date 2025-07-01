@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import blandLogo from "@/app/bland.png";
 
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function Header() {
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center">
-            <Image src="/bland.png" alt="Logo" width={32} height={32} />
+            <Image src={blandLogo} alt="Logo" width={32} height={32} />
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
@@ -84,7 +85,7 @@ export default function Header() {
                 <SheetTitle className="sr-only">Menu</SheetTitle>
                 <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
                 <Link href="/" className="flex items-center mb-6" onClick={() => setSheetOpen(false)}>
-                   <Image src="/bland.png" alt="Logo" width={32} height={32} />
+                   <Image src={blandLogo} alt="Logo" width={32} height={32} />
                 </Link>
                 <div className="flex flex-col space-y-3">
                   {navLinks.map((link) => (
@@ -144,7 +145,7 @@ export default function Header() {
             </Sheet>
           </div>
           <Link href="/" className="flex items-center md:hidden">
-            <Image src="/bland.png" alt="Logo" width={32} height={32} />
+            <Image src={blandLogo} alt="Logo" width={32} height={32} />
           </Link>
           <nav className="hidden md:flex items-center space-x-2">
             {!loading && (
