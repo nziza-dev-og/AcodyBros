@@ -49,7 +49,7 @@ export default function MessageBubble({ message, currentUser, participantInfo }:
     >
       {!isCurrentUser && (
          <Avatar className="h-8 w-8">
-            <AvatarImage src={sender.photoURL} alt={sender.name} />
+            <AvatarImage src={sender.photoURL || undefined} alt={sender.name} />
             <AvatarFallback>{sender.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       )}
@@ -81,7 +81,7 @@ export default function MessageBubble({ message, currentUser, participantInfo }:
 
        {isCurrentUser && (
          <Avatar className="h-8 w-8">
-            <AvatarImage src={sender.photoURL} alt={sender.name} />
+            <AvatarImage src={sender.photoURL || undefined} alt={sender.name} />
             <AvatarFallback>{sender.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       )}

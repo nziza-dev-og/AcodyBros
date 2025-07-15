@@ -106,7 +106,7 @@ export default function ProfilePage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={photoUrlValue || user?.photoURL} alt={user?.name} data-ai-hint="user avatar" />
+                  <AvatarImage src={photoUrlValue || undefined} alt={user?.name} data-ai-hint="user avatar" />
                   <AvatarFallback className="text-3xl">
                     {user?.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>

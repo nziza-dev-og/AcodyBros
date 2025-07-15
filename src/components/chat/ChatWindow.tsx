@@ -93,7 +93,7 @@ export default function ChatWindow({ chat, currentUser }: ChatWindowProps) {
     <div className={cn("flex flex-1 flex-col h-full", !chat && "hidden md:flex")}>
       <div className="flex items-center p-4 border-b">
          <Avatar className="h-10 w-10 mr-4">
-            <AvatarImage src={partner?.photoURL} alt={partner?.name}/>
+            <AvatarImage src={partner?.photoURL || undefined} alt={partner?.name || 'Avatar'}/>
             <AvatarFallback>
                 {partner?.isGroup ? <Users/> : partner?.name?.charAt(0).toUpperCase()}
             </AvatarFallback>
