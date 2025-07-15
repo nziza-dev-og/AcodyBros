@@ -1,10 +1,11 @@
+
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Briefcase, User, Wrench, LogOut, MessageSquare } from "lucide-react";
+import { Menu, Briefcase, User, Wrench, LogOut, MessageSquare, LayoutDashboard } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
@@ -103,14 +104,24 @@ export default function Header() {
                   {user ? (
                     <>
                       <Separator className="my-2" />
-                      <Link
-                        href={dashboardLink}
-                        onClick={() => setSheetOpen(false)}
-                        className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
-                      >
-                        {user.role === 'admin' ? <Wrench className="h-4 w-4" /> : <Briefcase className="h-4 w-4" />}
-                        {user.role === 'admin' ? "Admin Panel" : "Dashboard"}
-                      </Link>
+                       <Link
+                          href={dashboardLink}
+                          onClick={() => setSheetOpen(false)}
+                          className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+                        >
+                          {user.role === 'admin' ? <Wrench className="h-4 w-4" /> : <LayoutDashboard className="h-4 w-4" />}
+                          <span>{user.role === 'admin' ? "Admin Panel" : "Dashboard"}</span>
+                        </Link>
+                         {user.role === 'admin' && (
+                           <Link
+                              href="/dashboard"
+                              onClick={() => setSheetOpen(false)}
+                              className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+                            >
+                              <Briefcase className="h-4 w-4" />
+                              <span>Client Dashboard</span>
+                            </Link>
+                         )}
                       <Link
                         href={chatLink}
                         onClick={() => setSheetOpen(false)}
@@ -185,10 +196,18 @@ export default function Header() {
                       <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                            <Link href={dashboardLink}>
-                            {user.role === 'admin' ? <Wrench className="mr-2 h-4 w-4" /> : <Briefcase className="mr-2 h-4 w-4" />}
+                            {user.role === 'admin' ? <Wrench className="mr-2 h-4 w-4" /> : <LayoutDashboard className="mr-2 h-4 w-4" />}
                             <span>{user.role === 'admin' ? "Admin Panel" : "Dashboard"}</span>
                           </Link>
                         </DropdownMenuItem>
+                        {user.role === 'admin' && (
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard">
+                                <Briefcase className="mr-2 h-4 w-4" />
+                                <span>Client Dashboard</span>
+                                </Link>
+                            </DropdownMenuItem>
+                        )}
                          <DropdownMenuItem asChild>
                            <Link href={chatLink}>
                             <MessageSquare className="mr-2 h-4 w-4" />
