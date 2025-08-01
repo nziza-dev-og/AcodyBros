@@ -32,8 +32,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { submitProjectRequest, getAIBrief } from "@/app/dashboard/new-request/actions";
 import { Upload, Link as LinkIcon, Sparkles, Wand2, FileText, ListChecks } from "lucide-react";
-import type { ProjectBrieferOutput } from "@/ai/flows/project-briefer-flow";
+import type { ProjectBrieferOutput } from "@/ai/types";
 import { Skeleton } from "../ui/skeleton";
+import { Label } from "../ui/label";
 
 
 // Client-side schema for form validation

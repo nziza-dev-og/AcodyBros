@@ -7,7 +7,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { revalidatePath } from "next/cache";
 import { projectRequestSchema } from "@/lib/schemas";
 import { z } from "zod";
-import { generateProjectBrief, type ProjectBrieferInput, type ProjectBrieferOutput } from "@/ai/flows/project-briefer-flow";
+import { generateProjectBrief } from "@/ai/flows/project-briefer-flow";
+import type { ProjectBrieferInput, ProjectBrieferOutput } from "@/ai/types";
 
 export async function submitProjectRequest(formData: FormData) {
   try {

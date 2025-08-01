@@ -3,30 +3,12 @@
  * @fileOverview An AI-powered project briefer to assist clients in drafting project requests.
  *
  * - generateProjectBrief - A function that generates a project title, description, and key features.
- * - ProjectBrieferInput - The input type for the generateProjectBrief function.
- * - ProjectBrieferOutput - The return type for the generateProjectBrief function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-
-export const ProjectBrieferInputSchema = z.object({
-  prompt: z.string().describe('The user\'s initial idea or prompt for the project.'),
-});
-export type ProjectBrieferInput = z.infer<typeof ProjectBrieferInputSchema>;
-
-export const ProjectBrieferOutputSchema = z.object({
-  title: z.string().describe('A concise and descriptive title for the project.'),
-  description: z
-    .string()
-    .describe('A detailed description of the project, its goals, and target audience.'),
-  keyFeatures: z
-    .string()
-    .describe(
-      'A bulleted or numbered list of the key features required for the project.'
-    ),
-});
-export type ProjectBrieferOutput = z.infer<typeof ProjectBrieferOutputSchema>;
+import type { ProjectBrieferInput, ProjectBrieferOutput } from '@/ai/types';
+import { ProjectBrieferInputSchema, ProjectBrieferOutputSchema } from '@/ai/types';
 
 
 const brieferPrompt = ai.definePrompt({
