@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Paperclip, Send } from 'lucide-react';
@@ -8,10 +9,20 @@ import { Paperclip, Send } from 'lucide-react';
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
+  initialValue?: string;
 }
 
-export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
-  const [message, setMessage] = useState('');
+export default function ChatInput({ onSendMessage, isLoading, initialValue = '' }: ChatInputProps) {
+  const [message, setMessage] = useState(initialValue);
+
+  useEffect(() => {
+    // Only set the initial value if the component is just mounted or initialValue changes
+    // and there's no ongoing message composition.
+    if (initialValue && message === '') {
+      setMessage(initialValue);
+    }
+  }, [initialValue, message]);
+
 
   const handleSend = () => {
     if (message.trim()) {

@@ -3,7 +3,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 
@@ -27,10 +27,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { submitProjectRequest } from "@/app/dashboard/new-request/actions";
-import { Upload, Link as LinkIcon } from "lucide-react";
+import { Upload, Link as LinkIcon, Sparkles } from "lucide-react";
+import AcodyAI from "@/components/acodyai/AcodyAI";
+
 
 // Client-side schema for form validation
 const formSchema = z.object({
@@ -109,6 +112,10 @@ export default function ProjectRequestForm() {
       router.push("/dashboard");
     }
   }
+  
+  const handleUseDescription = (description: string) => {
+    form.setValue('description', description);
+  };
 
   return (
     <Card className="shadow-lg">
@@ -137,7 +144,32 @@ export default function ProjectRequestForm() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Description</FormLabel>
+                   <div className="flex items-center justify-between">
+                     <FormLabel>Project Description</FormLabel>
+                     <Dialog>
+                       <DialogTrigger asChild>
+                         <Button variant="outline" size="sm">
+                           <Sparkles className="mr-2 h-4 w-4" />
+                           Generate with AI
+                         </Button>
+                       </DialogTrigger>
+                       <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
+                         <DialogHeader>
+                           <DialogTitle>Acody AI Assistant</DialogTitle>
+                           <DialogDescription>
+                             Use the AI to help you draft a project description. When you're happy with it, click "Use this Description" to add it to the form.
+                           </DialogDescription>
+                         </DialogHeader>
+                         <div className="flex-1 min-h-0">
+                           <AcodyAI 
+                             mode="writer"
+                             onWriterSubmit={handleUseDescription}
+                             initialPrompt="Help me write a project description. My project is about: "
+                           />
+                         </div>
+                       </DialogContent>
+                     </Dialog>
+                   </div>
                   <FormControl>
                     <Textarea
                       placeholder="Describe your project in detail. What are its goals? Who is the target audience?"
