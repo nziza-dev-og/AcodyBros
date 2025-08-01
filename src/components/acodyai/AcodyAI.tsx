@@ -58,15 +58,16 @@ export default function AcodyAI() {
       content: [{ text: userMessage }],
     };
     
-    const updatedMessages = [...currentChat, newUserMessage];
-    setCurrentChat(updatedMessages);
+    const updatedChat = [...currentChat, newUserMessage];
+    setCurrentChat(updatedChat);
 
     // Add a placeholder for the model's response
-    setCurrentChat((prev) => [...prev, { role: 'model', content: [{ text: '' }] }]);
+    const placeholderMessage: Message = { role: 'model', content: [{ text: '' }] };
+    setCurrentChat((prev) => [...prev, placeholderMessage]);
 
     try {
       const stream = await getAcodyResponse({
-        history: updatedMessages.slice(0, -1), // Exclude the placeholder
+        history: updatedChat,
         message: userMessage,
       });
 
@@ -88,7 +89,9 @@ export default function AcodyAI() {
         }
       }
       
-      const finalMessages = [...updatedMessages, { role: 'model', content: [{ text: fullResponse }] }];
+      // The state is now fully updated with the final response.
+      // Now, update the history.
+      const finalMessages = [...updatedChat, { role: 'model', content: [{ text: fullResponse }] }];
       
       if (activeChatId === null) {
         // This is a new chat, so create a new session in history
