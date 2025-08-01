@@ -1,4 +1,5 @@
 import type {Config} from 'tailwindcss';
+const { fontFamily } = require("tailwindcss/defaultTheme")
 
 export default {
   darkMode: ['class'],
@@ -13,8 +14,13 @@ export default {
         body: ['"Space Grotesk"', 'sans-serif'],
         headline: ['"Space Grotesk"', 'sans-serif'],
         code: ['monospace'],
+         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       colors: {
+        'deepseek-bg-dark': '#1E1E1E',
+        'deepseek-bg-light': '#2A2A2A',
+        'deepseek-border': '#3A3A3A',
+        'deepseek-accent': '#4A90E2',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -107,7 +113,34 @@ export default {
         'shine': 'shine 4s linear infinite',
         'blink': 'blink 1s step-end infinite',
       },
+       typography: (theme: (arg0: string) => any) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.gray.200'),
+            a: {
+              color: theme('colors.blue.400'),
+              '&:hover': {
+                color: theme('colors.blue.300'),
+              },
+            },
+            h1: { color: theme('colors.white') },
+            h2: { color: theme('colors.white') },
+            h3: { color: theme('colors.white') },
+            strong: { color: theme('colors.white') },
+            code: {
+              backgroundColor: theme('colors.gray.800'),
+              color: theme('colors.gray.200'),
+              padding: '0.2em 0.4em',
+              borderRadius: '0.25rem',
+            },
+            pre: {
+              backgroundColor: theme('colors.gray.900'),
+              color: theme('colors.gray.200'),
+            }
+          },
+        },
+      }),
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require("@tailwindcss/typography")],
 } satisfies Config;

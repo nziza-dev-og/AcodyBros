@@ -1,6 +1,6 @@
 'use client';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Bot, FileText, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Users, Bot, FileText, MessageSquare, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,6 +14,7 @@ export default function AdminSidebar() {
         { href: "/admin/requests", label: "Requests", icon: <FileText /> },
         { href: "/admin/chat", label: "Chat", icon: <MessageSquare /> },
         { href: "/admin/estimator", label: "AI Estimator", icon: <Bot /> },
+        { href: "/admin/deepseek", label: "DeepSeek AI", icon: <Sparkles /> },
     ];
 
     return (
@@ -21,7 +22,7 @@ export default function AdminSidebar() {
             <SidebarHeader>
                  <div className="flex items-center justify-center p-4 group-data-[collapsible=icon]:hidden">
                     <Link href="/">
-                        <Image src={blandLogo} alt="Logo" width={120} height={120} />
+                        <Image src={blandLogo} alt="Logo" width={160} height={160} />
                     </Link>
                 </div>
             </SidebarHeader>
