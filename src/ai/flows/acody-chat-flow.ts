@@ -18,7 +18,7 @@ export async function chat(
     content: msg.content.map((c) => ({ text: c.text })),
   }));
 
-  const { stream } = await ai.generateStream({
+  const { stream } = ai.generateStream({
     prompt: message,
     history: historyGenkit,
   });
