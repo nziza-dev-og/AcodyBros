@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { revalidatePath } from "next/cache";
 import { projectRequestSchema } from "@/lib/schemas";
 import { z } from "zod";
+import { generateProjectBrief, type ProjectBrieferInput, type ProjectBrieferOutput } from "@/ai/flows/project-briefer-flow";
 
 export async function submitProjectRequest(formData: FormData) {
   try {
@@ -68,5 +69,16 @@ export async function submitProjectRequest(formData: FormData) {
     return {
       error: "There was an error submitting your request. Please try again.",
     };
+  }
+}
+
+
+export async function getAIBrief(input: ProjectBrieferInput): Promise<ProjectBrieferOutput> {
+  try {
+    const result = await generateProjectBrief(input);
+    return result;
+  } catch (error) {
+    console.error("Error in getAIBrief server action:", error);
+    throw new Error("Failed to get project brief from the AI flow.");
   }
 }
