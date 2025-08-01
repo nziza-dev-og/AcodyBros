@@ -10,8 +10,7 @@ import type { Part } from '@genkit-ai/googleai';
 import type { ChatInput } from '@/ai/types';
 
 export async function chat(
-  input: ChatInput,
-  callback: (chunk: any) => void
+  input: ChatInput
 ) {
   const { history, message } = input;
   const historyGenkit: Part[] = history.map((msg) => ({
@@ -24,7 +23,5 @@ export async function chat(
     history: historyGenkit,
   });
 
-  for await (const chunk of stream) {
-    callback(chunk);
-  }
+  return stream;
 }

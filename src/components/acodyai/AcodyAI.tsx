@@ -5,7 +5,6 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import AcodyAISidebar from './Sidebar';
 import { getAcodyResponse } from '@/app/admin/acody/actions';
-import type { ChatInput as ChatInputType } from '@/ai/types';
 
 interface Message {
   role: 'user' | 'model';
@@ -39,27 +38,39 @@ export default function AcodyAI() {
     // Add a placeholder for the model's response
     setMessages((prev) => [...prev, { role: 'model', content: [{ text: '' }] }]);
 
-    await getAcodyResponse(
-      { history: currentMessages, message: userMessage },
-      (chunk) => {
-        if (chunk.content) {
-          const content = chunk.content[0]?.text;
-          if (content) {
-            setMessages((prev) => {
-              const newMessages = [...prev];
-              const lastMessage = newMessages[newMessages.length - 1];
-              if (lastMessage.role === 'model') {
-                lastMessage.content[0].text += content;
-              }
-              return newMessages;
-            });
-          }
-        }
-        if (chunk.usage) {
-          setIsLoading(false);
+    try {
+      const stream = await getAcodyResponse(
+        { history: currentMessages, message: userMessage }
+      );
+      
+      for await (const chunk of stream) {
+         if (chunk.content) {
+            const content = chunk.content[0]?.text;
+            if (content) {
+                setMessages((prev) => {
+                const newMessages = [...prev];
+                const lastMessage = newMessages[newMessages.length - 1];
+                if (lastMessage.role === 'model') {
+                    lastMessage.content[0].text += content;
+                }
+                return newMessages;
+                });
+            }
         }
       }
-    );
+    } catch(e) {
+      console.error(e);
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage.role === 'model') {
+            lastMessage.content[0].text = "Sorry, I ran into an error.";
+        }
+        return newMessages;
+      });
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   return (
