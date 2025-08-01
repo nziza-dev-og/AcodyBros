@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import AcodyAISidebar from './Sidebar';
-import { chat } from '@/ai/flows/deepseek-chat-flow';
+import { getAcodyResponse } from '@/app/admin/acody/actions';
+import type { ChatInput as ChatInputType } from '@/ai/types';
 
 interface Message {
   role: 'user' | 'model';
@@ -32,13 +33,14 @@ export default function AcodyAI() {
       content: [{ text: userMessage }],
     };
     
-    setMessages((prev) => [...prev, newUserMessage]);
+    const currentMessages: Message[] = [...messages, newUserMessage];
+    setMessages(currentMessages);
 
     // Add a placeholder for the model's response
     setMessages((prev) => [...prev, { role: 'model', content: [{ text: '' }] }]);
 
-    await chat(
-      { history: messages, message: userMessage },
+    await getAcodyResponse(
+      { history: currentMessages, message: userMessage },
       (chunk) => {
         if (chunk.content) {
           const content = chunk.content[0]?.text;

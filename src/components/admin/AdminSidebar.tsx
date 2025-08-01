@@ -14,7 +14,7 @@ export default function AdminSidebar() {
         { href: "/admin/requests", label: "Requests", icon: <FileText /> },
         { href: "/admin/chat", label: "Chat", icon: <MessageSquare /> },
         { href: "/admin/estimator", label: "AI Estimator", icon: <Bot /> },
-        { href: "/admin/deepseek", label: "Acody Ai", icon: <Sparkles /> },
+        { href: "/admin/acody", label: "Acody Ai", icon: <Sparkles /> },
     ];
 
     return (
