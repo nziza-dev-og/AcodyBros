@@ -27,14 +27,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
-import { submitProjectRequest, getAIBrief } from "@/app/dashboard/new-request/actions";
-import { Upload, Link as LinkIcon, Sparkles, Wand2, FileText, ListChecks } from "lucide-react";
+import { submitProjectRequest } from "@/app/dashboard/new-request/actions";
+import { Upload, Link as LinkIcon } from "lucide-react";
 import type { ProjectBrieferOutput } from "@/ai/types";
-import { Skeleton } from "../ui/skeleton";
-import { Label } from "../ui/label";
+import AcodyAIWriter from "../acodyai/AcodyAIWriter";
 
 
 // Client-side schema for form validation
@@ -45,100 +43,6 @@ const formSchema = z.object({
   budget: z.string().optional().default(""),
   fileUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
 });
-
-const AIWriterDialog = ({ onDraftReady }: { onDraftReady: (draft: ProjectBrieferOutput) => void }) => {
-    const [prompt, setPrompt] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [draft, setDraft] = useState<ProjectBrieferOutput | null>(null);
-    const { toast } = useToast();
-
-    const handleGenerate = async () => {
-        if (prompt.trim().length < 10) {
-            toast({ variant: "destructive", title: "Prompt too short", description: "Please provide a bit more detail about your idea." });
-            return;
-        }
-        setIsLoading(true);
-        setDraft(null);
-        try {
-            const result = await getAIBrief({ prompt });
-            setDraft(result);
-        } catch (error) {
-            console.error(error);
-            toast({ variant: "destructive", title: "Error", description: "Failed to generate draft. Please try again." });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-    const handleUseDraft = () => {
-        if(draft) {
-            onDraftReady(draft);
-            toast({ title: "Draft Applied", description: "The generated content has been added to the form."});
-        }
-    };
-
-    return (
-        <DialogContent className="max-w-3xl">
-            <DialogHeader>
-                <DialogTitle className="flex items-center gap-2"><Wand2 /> AI Project Assistant</DialogTitle>
-                <DialogDescription>
-                    Describe your project idea, and the AI will help you create a title, description, and list of key features.
-                </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                    <Label htmlFor="ai-prompt">Your Project Idea</Label>
-                    <Textarea 
-                        id="ai-prompt"
-                        placeholder="e.g., 'An app for local gardeners to trade plants and seeds', or 'A website for my bakery that shows my menu and takes custom cake orders'."
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                        rows={3}
-                        disabled={isLoading}
-                    />
-                </div>
-                <Button onClick={handleGenerate} disabled={isLoading || prompt.trim().length < 10}>
-                    {isLoading ? "Generating..." : <><Sparkles className="mr-2 h-4 w-4" /> Generate Draft</>}
-                </Button>
-            </div>
-            
-            {(isLoading || draft) && (
-                <div className="space-y-6 pt-4 border-t">
-                    {isLoading ? (
-                        <div className="space-y-4">
-                            <Skeleton className="h-8 w-1/3" />
-                             <Skeleton className="h-6 w-1/4" />
-                             <Skeleton className="h-20 w-full" />
-                             <Skeleton className="h-6 w-1/4 mt-4" />
-                             <Skeleton className="h-16 w-full" />
-                        </div>
-                    ) : draft && (
-                        <div className="space-y-4">
-                             <div>
-                                 <h3 className="font-semibold mb-2 flex items-center gap-2"><FileText className="h-4 w-4 text-primary"/>Generated Title</h3>
-                                 <p className="text-muted-foreground p-3 bg-muted rounded-md">{draft.title}</p>
-                             </div>
-                             <div>
-                                 <h3 className="font-semibold mb-2 flex items-center gap-2"><FileText className="h-4 w-4 text-primary"/>Generated Description</h3>
-                                 <p className="text-muted-foreground p-3 bg-muted rounded-md whitespace-pre-wrap">{draft.description}</p>
-                             </div>
-                             <div>
-                                 <h3 className="font-semibold mb-2 flex items-center gap-2"><ListChecks className="h-4 w-4 text-primary"/>Generated Key Features</h3>
-                                 <p className="text-muted-foreground p-3 bg-muted rounded-md whitespace-pre-wrap">{draft.keyFeatures}</p>
-                             </div>
-                        </div>
-                    )}
-                     <DialogClose asChild>
-                         <Button onClick={handleUseDraft} disabled={!draft} className="w-full">
-                            Use This Draft
-                        </Button>
-                    </DialogClose>
-                </div>
-            )}
-        </DialogContent>
-    )
-
-}
 
 export default function ProjectRequestForm() {
   const [loading, setLoading] = useState(false);
@@ -224,15 +128,7 @@ export default function ProjectRequestForm() {
                 <CardTitle>Project Details</CardTitle>
                 <CardDescription>Fill in the form below to get started.</CardDescription>
             </div>
-             <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="outline">
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        Use AI Assistant
-                    </Button>
-                </DialogTrigger>
-                <AIWriterDialog onDraftReady={handleDraftReady} />
-            </Dialog>
+             <AcodyAIWriter onDraftReady={handleDraftReady} />
         </div>
       </CardHeader>
       <CardContent>

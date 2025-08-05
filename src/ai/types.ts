@@ -1,13 +1,17 @@
+
 import { z } from 'genkit';
 
-const MessageSchema = z.object({
+export const MessageSchema = z.object({
   role: z.enum(['user', 'model']),
   content: z.array(z.object({ text: z.string() })),
 });
+export type Message = z.infer<typeof MessageSchema>;
+
 
 export const ChatInputSchema = z.object({
   history: z.array(MessageSchema),
   message: z.string(),
+  mode: z.enum(['chat', 'writer']).optional().default('chat'),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 

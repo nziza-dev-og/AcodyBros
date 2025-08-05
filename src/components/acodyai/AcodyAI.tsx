@@ -7,14 +7,10 @@ import ChatMessage from './ChatMessage';
 import AcodyAISidebar from './Sidebar';
 import { getAcodyResponse } from '@/app/admin/acody/actions';
 import { Button } from '@/components/ui/button';
-import { PanelLeftClose, PanelLeftOpen, Send } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, Send, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '../ui/dialog';
-
-interface Message {
-  role: 'user' | 'model';
-  content: { text: string }[];
-}
+import type { Message } from '@/ai/types';
 
 interface ChatSession {
   id: number;
@@ -42,9 +38,10 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
   const showSidebar = !isWriterMode && isSidebarOpen;
 
   useEffect(() => {
-    if (isWriterMode && initialPrompt) {
-      setCurrentChat([{ role: 'user', content: [{ text: initialPrompt }] }]);
+    if (isWriterMode && initialPrompt && initialPrompt.trim().length > 10) {
+      handleSendMessage(initialPrompt, true);
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isWriterMode, initialPrompt]);
 
 
@@ -69,7 +66,9 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
     }
   };
 
-  const handleSendMessage = async (userMessage: string) => {
+  const handleSendMessage = async (userMessage: string, isInitial = false) => {
+    if (isWriterMode && !isInitial) return;
+
     setIsLoading(true);
 
     const newUserMessage: Message = {
@@ -77,17 +76,22 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
       content: [{ text: userMessage }],
     };
     
-    const updatedChat = [...currentChat, newUserMessage];
+    let updatedChat: Message[];
+    if (isWriterMode) {
+      updatedChat = [newUserMessage];
+    } else {
+      updatedChat = [...currentChat, newUserMessage];
+    }
     setCurrentChat(updatedChat);
 
-    // Add a placeholder for the model's response
     const placeholderMessage: Message = { role: 'model', content: [{ text: '' }] };
     setCurrentChat((prev) => [...prev, placeholderMessage]);
 
     try {
       const stream = await getAcodyResponse({
-        history: updatedChat.slice(0, -1), // Don't include the placeholder in history
+        history: updatedChat,
         message: userMessage,
+        mode: isWriterMode ? 'writer' : 'chat',
       });
 
       let fullResponse = '';
@@ -98,11 +102,12 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
             fullResponse += content;
             setCurrentChat((prev) => {
               const newMessages = [...prev];
-              const lastMessage = newMessages[newMessages.length - 1];
-              if (lastMessage.role === 'model') {
-                lastMessage.content = [{ text: fullResponse }];
+              const lastMessageIndex = newMessages.length - 1;
+              if (lastMessageIndex >= 0 && newMessages[lastMessageIndex].role === 'model') {
+                newMessages[lastMessageIndex] = { role: 'model', content: [{ text: fullResponse }] };
+                 return newMessages;
               }
-              return newMessages;
+              return prev;
             });
           }
         }
@@ -116,14 +121,14 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
           const newChatSession: ChatSession = {
             id: newChatId,
             title: userMessage.substring(0, 40) + '...',
-            messages: finalMessages.slice(0, -1), // Remove the placeholder
+            messages: finalMessages,
           };
           setChatHistory(prev => [newChatSession, ...prev]);
           setActiveChatId(newChatId);
           setNextId(prev => prev + 1);
         } else {
           setChatHistory(prev => prev.map(chat =>
-            chat.id === activeChatId ? { ...chat, messages: finalMessages.slice(0, -1) } : chat
+            chat.id === activeChatId ? { ...chat, messages: finalMessages } : chat
           ));
         }
       }
@@ -148,12 +153,16 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
     const lastMessage = currentChat[currentChat.length - 1];
     if (lastMessage && lastMessage.role === 'model' && onWriterSubmit) {
       onWriterSubmit(lastMessage.content.map(c => c.text).join(''));
-       toast({
-        title: "Description Added",
-        description: "The generated description has been added to the form.",
-      });
     }
   };
+
+  const handleRegenerate = () => {
+    const lastUserMessage = currentChat.find(m => m.role === 'user');
+    if (lastUserMessage) {
+        handleSendMessage(lastUserMessage.content.map(c => c.text).join(''), true);
+    }
+  };
+
 
   return (
     <div className="flex w-full h-full bg-deepseek-bg-dark text-white rounded-md">
@@ -182,26 +191,28 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
           {currentChat.map((msg, index) => (
             <ChatMessage key={index} message={msg} />
           ))}
-          {isLoading && currentChat[currentChat.length - 1].role !== 'model' && (
+          {isLoading && currentChat[currentChat.length - 1]?.role !== 'model' && (
             <div className="flex items-start gap-4 p-4">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
               <p>Thinking...</p>
             </div>
           )}
         </div>
-        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} initialValue={isWriterMode ? initialPrompt : ''}/>
 
+        {!isWriterMode && (
+           <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        )}
+        
         {isWriterMode && (
           <div className="p-4 border-t border-deepseek-border flex justify-end gap-2">
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-             <DialogClose asChild>
-                <Button onClick={handleUseWriterResponse} disabled={isLoading || currentChat.length < 2}>
-                  <Send className="mr-2 h-4 w-4" />
-                  Use this Description
-                </Button>
-            </DialogClose>
+            <Button variant="outline" onClick={handleRegenerate} disabled={isLoading || !initialPrompt}>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Regenerate
+            </Button>
+            <Button onClick={handleUseWriterResponse} disabled={isLoading || currentChat.length < 2}>
+              <Send className="mr-2 h-4 w-4" />
+              Use this Draft
+            </Button>
           </div>
         )}
       </div>
