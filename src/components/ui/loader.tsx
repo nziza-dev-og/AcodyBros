@@ -10,51 +10,46 @@ interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
     text?: string;
 }
 
-const Loader = ({ className, size = 48, text = "Loading...", ...props }: LoaderProps) => {
+const Loader = ({ className, size = 64, text = "Loading...", ...props }: LoaderProps) => {
     const animationRef = useRef<anime.AnimeInstance | null>(null);
-    const pathRef = useRef<SVGPathElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const numCircles = 5;
 
     useEffect(() => {
-        if (pathRef.current) {
-            // Set initial dash offset
-            const pathLength = pathRef.current.getTotalLength();
-            pathRef.current.style.strokeDasharray = `${pathLength} ${pathLength}`;
-            pathRef.current.style.strokeDashoffset = `${pathLength}`;
-
-            animationRef.current = anime({
-                targets: pathRef.current,
-                strokeDashoffset: [anime.setDashoffset, 0],
+        if (wrapperRef.current) {
+            animationRef.current = anime.timeline({
+                loop: true,
                 easing: 'easeInOutSine',
+            }).add({
+                targets: wrapperRef.current.querySelectorAll('.circle'),
+                scale: (el: any, i: number) => 1 + i * 0.25,
+                opacity: [1, 0],
                 duration: 1500,
-                delay: function(el, i) { return i * 250 },
-                direction: 'alternate',
-                loop: true
+                delay: anime.stagger(150),
             });
         }
-
         return () => {
             animationRef.current?.pause();
         };
     }, []);
 
     return (
-        <div className={cn("flex flex-col items-center justify-center gap-4", className)} {...props}>
-            <svg 
-                width={size} 
-                height={size} 
-                viewBox="0 0 48 48" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-                className="-rotate-90"
+        <div className={cn("flex flex-col items-center justify-center gap-6", className)} {...props}>
+            <div 
+                ref={wrapperRef} 
+                className="relative"
+                style={{ width: size, height: size }}
             >
-                <path 
-                    ref={pathRef}
-                    d="M24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4Z" 
-                    stroke="hsl(var(--primary))" 
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                />
-            </svg>
+                {[...Array(numCircles)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="circle absolute inset-0 rounded-full border-2 border-primary"
+                        style={{
+                            transformOrigin: 'center center'
+                        }}
+                    />
+                ))}
+            </div>
             <p className="text-muted-foreground">{text}</p>
         </div>
     );

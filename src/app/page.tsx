@@ -13,7 +13,7 @@ const allSnippets = [
     [{ text: 'import', color: 'text-purple-400' }, { text: ' React ', color: 'text-blue-400' }, { text: 'from', color: 'text-purple-400' }, { text: ' "react"', color: 'text-teal-300' }, { text: ';', color: 'text-gray-200' }],
     [],
     [{ text: 'const', color: 'text-purple-400' }, { text: ' Welcome', color: 'text-green-400' }, { text: ' = (', color: 'text-gray-200' }, { text: '{ name }', color: 'text-blue-400' }, { text: ') => (', color: 'text-gray-200' }],
-    [{ text: '  &lt;h1&gt;', color: 'text-gray-400' }, { text: 'Hello, {name}!', color: 'text-gray-200' }, { text: '&lt;/h1&gt;', color: 'text-gray-400' }],
+    [{ text: '  <h1>', color: 'text-gray-400' }, { text: 'Hello, {name}!', color: 'text-gray-200' }, { text: '</h1>', color: 'text-gray-400' }],
     [{ text: ');', color: 'text-gray-200' }],
   ],
   // Python Snippet
