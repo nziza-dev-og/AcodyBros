@@ -8,26 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import type { Part } from '@genkit-ai/googleai';
-import { z } from 'genkit';
 import type { ChatInput, Message } from '@/ai/types';
-import { ProjectBrieferInputSchema, ProjectBrieferOutputSchema } from '@/ai/types';
-
-const brieferPrompt = ai.definePrompt({
-  name: 'projectBrieferPrompt',
-  input: {schema: z.object({ prompt: z.string() })},
-  output: {schema: ProjectBrieferOutputSchema},
-  prompt: `You are an expert project manager and business analyst. A user will provide a prompt with their idea for a project. Your task is to expand on this idea and generate a structured project brief.
-
-Based on the user's prompt, create:
-1.  A clear and concise project **title**.
-2.  A detailed project **description** that covers the project's purpose, goals, and intended audience.
-3.  A list of **key features** that would be essential for the project. Format this as a bulleted or numbered list.
-
-User's Idea: {{{prompt}}}
-
-Provide your response as a single JSON object that conforms to the output schema.
-`,
-});
 
 export async function getAcodyResponse(
   input: ChatInput
