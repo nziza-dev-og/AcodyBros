@@ -140,7 +140,7 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
        setCurrentChat((prev) => {
         const newMessages = [...prev];
         const lastMessageIndex = newMessages.length - 1;
-        if(newMessages[lastMessageIndex].role === 'model') {
+        if(lastMessageIndex >= 0 && newMessages[lastMessageIndex].role === 'model') {
           newMessages[lastMessageIndex].content = [{ text: errorMessage }];
         }
         return newMessages;
@@ -189,6 +189,12 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
           </header>
          )}
         <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+          {currentChat.length === 0 && (
+             <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                <Sparkles className="h-16 w-16 mb-4" />
+                <h2 className="text-2xl font-semibold">How can I help you today?</h2>
+            </div>
+          )}
           {currentChat.map((msg, index) => (
             <ChatMessage key={index} message={msg} />
           ))}
