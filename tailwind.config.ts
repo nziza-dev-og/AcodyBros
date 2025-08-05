@@ -129,7 +129,7 @@ export default {
             '--tw-prose-captions': theme('colors.gray.400'),
             '--tw-prose-code': theme('colors.cyan.300'),
             '--tw-prose-pre-code': theme('colors.gray.300'),
-            '--tw-prose-pre-bg': theme('colors.gray.900'),
+            '--tw-prose-pre-bg': '#252525',
             '--tw-prose-th-borders': theme('colors.gray.600'),
             '--tw-prose-td-borders': theme('colors.gray.700'),
             '--tw-prose-invert-body': theme('colors.gray.300'),
@@ -151,6 +151,14 @@ export default {
             pre: {
                borderRadius: theme('borderRadius.lg'),
             },
+            code: {
+              '&::before': {
+                content: '"" !important',
+              },
+              '&::after': {
+                content: '"" !important',
+              },
+            }
           },
         },
       }),

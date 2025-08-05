@@ -82,3 +82,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.code-block-wrapper .copy-button {
+    visibility: hidden;
+}
+
+.code-block-wrapper:hover .copy-button {
+    visibility: visible;
+}
