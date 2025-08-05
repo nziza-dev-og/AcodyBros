@@ -46,7 +46,7 @@ export async function getAcodyResponse(
       User's Idea: ${message}
       
       Provide your response as a single, raw JSON object string that can be parsed with JSON.parse(). The JSON object must conform to the following structure: { "title": "...", "description": "...", "keyFeatures": "..." }. Do not wrap the JSON in markdown backticks or any other formatting.`,
-      model: ai.model('googleai/gemini-2.0-flash'),
+      model: 'googleai/gemini-2.0-flash',
       config: {
         temperature: 0.5,
       }
@@ -63,7 +63,7 @@ export async function getAcodyResponse(
   const { stream } = ai.generateStream({
     prompt: message,
     history: historyGenkit,
-    model: ai.model('googleai/gemini-2.0-flash'),
+    model: 'googleai/gemini-2.0-flash',
   });
 
   return stream;
