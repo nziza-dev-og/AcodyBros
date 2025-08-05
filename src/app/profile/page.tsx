@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { UserCircle2 } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Loader } from '@/components/ui/loader';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -73,20 +73,8 @@ export default function ProfilePage() {
 
   if (authLoading || !user) {
     return (
-        <div className="container mx-auto max-w-2xl px-4 py-12 md:py-16 md:px-6">
-             <Card>
-                <CardHeader>
-                    <Skeleton className="h-8 w-48"/>
-                    <Skeleton className="h-5 w-64 mt-2"/>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
-                    <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
-                    <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-10 w-full"/></div>
-                    <div className="space-y-2"><Skeleton className="h-5 w-24"/><Skeleton className="h-20 w-full"/></div>
-                    <Skeleton className="h-10 w-32"/>
-                </CardContent>
-            </Card>
+        <div className="container mx-auto max-w-2xl px-4 py-12 md:py-16 md:px-6 flex items-center justify-center min-h-[calc(100vh-20rem)]">
+             <Loader text="Loading Profile..." />
         </div>
     );
   }

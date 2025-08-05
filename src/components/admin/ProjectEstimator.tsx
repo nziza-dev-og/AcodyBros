@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ProjectEstimatorInput, ProjectEstimatorOutput } from "@/ai/flows/project-estimator";
 import { getProjectEstimate } from "@/app/admin/estimator/actions";
@@ -142,11 +142,10 @@ export default function ProjectEstimator() {
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle>Analysis in Progress...</CardTitle>
+            <CardDescription>The AI is analyzing your project details.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Skeleton className="h-8 w-3/4" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-8 w-1/2" />
+          <CardContent className="flex items-center justify-center py-12">
+            <Loader text="Generating analysis..."/>
           </CardContent>
         </Card>
       )}

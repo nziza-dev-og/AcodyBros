@@ -11,6 +11,7 @@ import { PanelLeftClose, PanelLeftOpen, Send, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { DialogClose } from '../ui/dialog';
 import type { Message } from '@/ai/types';
+import { Loader } from '../ui/loader';
 
 interface ChatSession {
   id: number;
@@ -192,9 +193,8 @@ export default function AcodyAI({ mode = 'chat', initialPrompt, onWriterSubmit }
             <ChatMessage key={index} message={msg} />
           ))}
           {isLoading && currentChat[currentChat.length - 1]?.role !== 'model' && (
-            <div className="flex items-start gap-4 p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-              <p>Thinking...</p>
+             <div className="flex items-start gap-4 p-4">
+              <Loader text="Acody is thinking..."/>
             </div>
           )}
         </div>

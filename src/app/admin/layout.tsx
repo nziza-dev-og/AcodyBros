@@ -7,7 +7,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 
 export default function AdminLayout({
   children,
@@ -30,10 +30,7 @@ export default function AdminLayout({
   if (loading || !user || user.role !== 'admin') {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="w-full max-w-lg space-y-4 p-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-96 w-full" />
-        </div>
+        <Loader text="Authenticating..." />
       </div>
     );
   }

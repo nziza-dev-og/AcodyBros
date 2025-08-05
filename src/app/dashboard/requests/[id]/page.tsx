@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, ListChecks, DollarSign, FileDown } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 import DeleteRequestButton from './DeleteRequestButton';
 
 export default function ClientRequestDetailsPage({ params }: { params: { id: string } }) {
@@ -55,24 +55,8 @@ export default function ClientRequestDetailsPage({ params }: { params: { id: str
 
     if (loading || authLoading || !request) {
         return (
-            <div className="container mx-auto max-w-4xl px-4 py-12 md:py-16 md:px-6 space-y-6">
-                <Card>
-                    <CardHeader>
-                        <Skeleton className="h-8 w-3/4" />
-                        <Skeleton className="h-5 w-1/4 mt-2" />
-                    </CardHeader>
-                    <CardContent className="space-y-6 pt-6">
-                        <div className="space-y-2">
-                           <Skeleton className="h-6 w-1/3" />
-                           <Skeleton className="h-20 w-full" />
-                        </div>
-                        <Separator />
-                        <div className="space-y-2">
-                           <Skeleton className="h-6 w-1/3" />
-                           <Skeleton className="h-16 w-full" />
-                        </div>
-                    </CardContent>
-                </Card>
+            <div className="container mx-auto max-w-4xl px-4 py-12 md:py-16 md:px-6 flex items-center justify-center min-h-[calc(100vh-20rem)]">
+                <Loader text="Loading Request Details..." />
             </div>
         )
     }

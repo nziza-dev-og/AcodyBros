@@ -8,7 +8,7 @@ import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestor
 import ChatSidebar from './ChatSidebar';
 import ChatWindow from './ChatWindow';
 import { getOrCreateAdminGroupChat, getOrCreateClientChat, type Chat } from '@/lib/chat-actions';
-import { Skeleton } from '../ui/skeleton';
+import { Loader } from '../ui/loader';
 import { Button } from '../ui/button';
 import { MessageSquarePlus } from 'lucide-react';
 
@@ -99,19 +99,8 @@ export default function ChatUI({ currentUser }: ChatUIProps) {
 
   if (loading && chats.length === 0) {
      return (
-        <div className="flex h-full">
-            <div className="hidden md:flex flex-col w-full max-w-xs border-r p-2 space-y-2">
-                {currentUser.role === 'admin' && <Skeleton className="h-10 w-full" />}
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-            </div>
-            <div className="flex-1 p-4 hidden md:flex flex-col">
-                <Skeleton className="h-full w-full" />
-            </div>
-            <div className="flex-1 p-4 md:hidden flex flex-col items-center justify-center">
-                <p>Loading Chats...</p>
-            </div>
+        <div className="flex h-full items-center justify-center">
+            <Loader text="Loading Chats..." />
         </div>
     );
   }

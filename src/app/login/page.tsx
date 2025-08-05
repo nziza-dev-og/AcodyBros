@@ -32,7 +32,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { LogIn } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -109,26 +109,7 @@ export default function LoginPage() {
   if (authLoading || user) {
      return (
       <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12">
-        <Card className="w-full max-w-md shadow-2xl">
-          <CardHeader className="text-center space-y-2">
-            <Skeleton className="h-8 w-48 mx-auto"/>
-            <Skeleton className="h-5 w-64 mx-auto"/>
-          </CardHeader>
-          <CardContent className="space-y-6">
-             <div className="space-y-2">
-                <Skeleton className="h-5 w-16"/>
-                <Skeleton className="h-10 w-full"/>
-             </div>
-             <div className="space-y-2">
-                <Skeleton className="h-5 w-16"/>
-                <Skeleton className="h-10 w-full"/>
-             </div>
-             <Skeleton className="h-10 w-full"/>
-          </CardContent>
-          <CardFooter>
-            <Skeleton className="h-5 w-48 mx-auto"/>
-          </CardFooter>
-        </Card>
+        <Loader text="Redirecting..." />
       </div>
     );
   }

@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ListTodo, Eye, PlusCircle } from "lucide-react";
 import { format } from 'date-fns';
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -76,6 +76,11 @@ export default function DashboardPage() {
               </CardDescription>
           </CardHeader>
           <CardContent>
+             {loading ? (
+                <div className="flex items-center justify-center h-48">
+                    <Loader text="Loading your requests..."/>
+                </div>
+             ) : (
               <Table>
                   <TableHeader>
                       <TableRow>
@@ -86,18 +91,7 @@ export default function DashboardPage() {
                       </TableRow>
                   </TableHeader>
                   <TableBody>
-                      {loading ? (
-                          <>
-                              {[...Array(3)].map((_, i) => (
-                                  <TableRow key={i}>
-                                      <TableCell><Skeleton className="h-5 w-[150px]"/></TableCell>
-                                      <TableCell className="hidden sm:table-cell"><Skeleton className="h-5 w-[100px]"/></TableCell>
-                                      <TableCell><Skeleton className="h-6 w-[80px] rounded-full"/></TableCell>
-                                      <TableCell className="text-right"><Skeleton className="h-9 w-[75px] ml-auto"/></TableCell>
-                                  </TableRow>
-                              ))}
-                          </>
-                      ) : requests.length > 0 ? requests.map((request) => (
+                      {requests.length > 0 ? requests.map((request) => (
                           <TableRow key={request.id}>
                               <TableCell className="font-medium">{request.title}</TableCell>
                               <TableCell className="hidden sm:table-cell">{request.submittedAt ? format(new Date(request.submittedAt), 'MMM d, yyyy') : 'Pending...'}</TableCell>
@@ -124,6 +118,7 @@ export default function DashboardPage() {
                       )}
                   </TableBody>
               </Table>
+             )}
           </CardContent>
       </Card>
     </div>

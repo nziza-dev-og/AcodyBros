@@ -4,7 +4,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader } from "@/components/ui/loader";
 
 export default function DashboardLayout({
   children,
@@ -22,14 +22,8 @@ export default function DashboardLayout({
 
   if (loading || !user) {
     return (
-       <div className="container mx-auto px-4 py-16 md:px-6">
-        <div className="space-y-4 text-center">
-          <Skeleton className="h-12 w-1/2 mx-auto" />
-          <Skeleton className="h-8 w-3/4 mx-auto" />
-        </div>
-        <div className="max-w-2xl mx-auto mt-12">
-            <Skeleton className="h-48 w-full"/>
-        </div>
+       <div className="container mx-auto px-4 py-16 md:px-6 flex min-h-[calc(100vh-20rem)] items-center justify-center">
+         <Loader text="Loading Dashboard..." />
       </div>
     );
   }
